@@ -1,0 +1,1 @@
+export const TIPOS_PATOGENO = ['virus', 'hongo', 'bacteria', 'oomiceto', 'nematodo', 'insecto'];
