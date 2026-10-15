@@ -3,5 +3,5 @@ export class ActualizarPatogenoDto {
   nombreCientifico: string;
   tipo: string;
   transmision: string;
-  secuenciaReferencia: string;
+  secuenciaGenetica: string;
 }
