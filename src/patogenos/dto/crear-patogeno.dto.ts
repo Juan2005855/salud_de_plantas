@@ -3,5 +3,5 @@ export class CrearPatogenoDto {
   nombreCientifico: string;
   tipo: string;
   transmision: string;
-  secuenciaReferencia: string;
+  secuenciaGenetica: string;
 }

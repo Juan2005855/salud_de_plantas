@@ -1,22 +1,23 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { TIPOS_PATOGENO } from './tipos-patogeno.js';
 
 @Entity('patogenos')
 export class Patogeno {
-  @PrimaryGeneratedColumn({ name: 'patogeno_id' })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ name: 'nombre' })
+  @Column({ length: 100 })
   nombre: string;
 
-  @Column({ name: 'nombre_cientifico', unique: true })
+  @Column({ length: 150, unique: true })
   nombreCientifico: string;
 
-  @Column({ name: 'tipo' })
+  @Column({ type: 'enum', enum: TIPOS_PATOGENO })
   tipo: string;
 
-  @Column({ name: 'transmision' })
+  @Column({ length: 100 })
   transmision: string;
 
-  @Column({ name: 'secuencia_referencia', type: 'longtext' })
-  secuenciaReferencia: string;
+  @Column({ type: 'text' })
+  secuenciaGenetica: string;
 }
