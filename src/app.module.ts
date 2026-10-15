@@ -1,20 +1,10 @@
-﻿import { Module } from '@nestjs/common';
-<<<<<<< HEAD
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
-
-@Module({
-  imports: [],
-=======
+﻿
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
-import { SusceptibilidadesModule } from './susceptibilidades/susceptibilidades.module.js';
-import { PlantasModule } from './plantas/plantas.module.js';
-import { EnfermedadesModule } from './enfermedades/enfermedades.module.js';
-import { BrotesModule } from './brotes/brotes.module.js';
 import { EstadisticasModule } from './estadisticas/estadisticas.module.js';
 
 @Module({
@@ -22,7 +12,6 @@ import { EstadisticasModule } from './estadisticas/estadisticas.module.js';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => ({
@@ -36,14 +25,8 @@ import { EstadisticasModule } from './estadisticas/estadisticas.module.js';
         synchronize: false,
       }),
     }),
-
-    SusceptibilidadesModule,
-    PlantasModule,
-    EnfermedadesModule,
-    BrotesModule,
     EstadisticasModule,
   ],
->>>>>>> 274c6db (feat: implementa estadisticas de brotes)
   controllers: [AppController],
   providers: [AppService],
 })
