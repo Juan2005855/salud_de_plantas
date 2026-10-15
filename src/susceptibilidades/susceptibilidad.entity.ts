@@ -6,9 +6,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-@Entity('susceptibilities')
+@Entity('susceptibilidades')
 @Index(
-  'UQ_susceptibility_plant_disease',
+  'UQ_susceptibilidades_planta_enfermedad',
   ['plantId', 'diseaseId'],
   { unique: true },
 )
@@ -16,12 +16,16 @@ export class Susceptibility {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: 'int' })
+  @Column({ name: 'plantaId', type: 'int' })
   plantId!: number;
 
-  @Column({ type: 'int' })
+  @Column({ name: 'enfermedadId', type: 'int' })
   diseaseId!: number;
 
-  @Column({ type: 'varchar', length: 10 })
+  @Column({
+    name: 'nivel',
+    type: 'enum',
+    enum: ['baja', 'media', 'alta'],
+  })
   level!: string;
 }
