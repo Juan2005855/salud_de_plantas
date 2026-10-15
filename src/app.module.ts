@@ -1,11 +1,12 @@
-﻿
-import { Module } from '@nestjs/common';
+﻿import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
 import { SusceptibilidadesModule } from './susceptibilidades/susceptibilidades.module.js';
+import { PlantasModule } from './plantas/plantas.module.js';
+import { EnfermedadesModule } from './enfermedades/enfermedades.module.js';
 
 @Module({
   imports: [
@@ -28,6 +29,8 @@ import { SusceptibilidadesModule } from './susceptibilidades/susceptibilidades.m
     }),
 
     SusceptibilidadesModule,
+    PlantasModule,
+    EnfermedadesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
