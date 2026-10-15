@@ -4,5 +4,5 @@ export class PatogenoOutDto {
   nombreCientifico: string;
   tipo: string;
   transmision: string;
-  secuenciaReferencia: string;
+  secuenciaGenetica: string;
 }
