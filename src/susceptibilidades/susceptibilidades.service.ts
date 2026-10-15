@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 
 import { Susceptibility } from './susceptibilidad.entity.js';
 import { CrearSusceptibilidadDto } from './dto/crear-susceptibilidad.dto.js';
@@ -17,6 +17,7 @@ export class SusceptibilidadesService {
   constructor(
     @InjectRepository(Susceptibility)
     private readonly repositorio: Repository<Susceptibility>,
+    private readonly dataSource: DataSource,
   ) {}
 
   private validarNivel(level: string): void {
@@ -29,12 +30,54 @@ export class SusceptibilidadesService {
     }
   }
 
+  private validarId(id: number, campo: string): void {
+    if (!Number.isInteger(id) || id <= 0) {
+      throw new BadRequestException(
+        `El campo ${campo} debe ser un número entero mayor que cero.`,
+      );
+    }
+  }
+
+  private async validarReferencias(
+    plantId: number,
+    diseaseId: number,
+  ): Promise<void> {
+    const plantas: Array<{ id: number }> =
+      await this.dataSource.query(
+        'SELECT id FROM plantas WHERE id = ?',
+        [plantId],
+      );
+
+    if (plantas.length === 0) {
+      throw new BadRequestException(
+        `No existe una planta con ID ${plantId}.`,
+      );
+    }
+
+    const enfermedades: Array<{ id: number }> =
+      await this.dataSource.query(
+        'SELECT id FROM enfermedades WHERE id = ?',
+        [diseaseId],
+      );
+
+    if (enfermedades.length === 0) {
+      throw new BadRequestException(
+        `No existe una enfermedad con ID ${diseaseId}.`,
+      );
+    }
+  }
+
   async crear(
     datos: CrearSusceptibilidadDto,
   ): Promise<Susceptibility> {
     this.validarId(datos.plantId, 'plantId');
     this.validarId(datos.diseaseId, 'diseaseId');
     this.validarNivel(datos.level);
+
+    await this.validarReferencias(
+      datos.plantId,
+      datos.diseaseId,
+    );
 
     const existente = await this.repositorio.findOne({
       where: {
@@ -98,6 +141,8 @@ export class SusceptibilidadesService {
     this.validarId(diseaseId, 'diseaseId');
     this.validarNivel(level);
 
+    await this.validarReferencias(plantId, diseaseId);
+
     const duplicada = await this.repositorio.findOne({
       where: { plantId, diseaseId },
     });
@@ -133,14 +178,6 @@ export class SusceptibilidadesService {
     return {
       mensaje: 'Susceptibilidad eliminada correctamente.',
     };
-  }
-
-  private validarId(id: number, campo: string): void {
-    if (!Number.isInteger(id) || id <= 0) {
-      throw new BadRequestException(
-        `El campo ${campo} debe ser un número entero mayor que cero.`,
-      );
-    }
   }
 
   private esDuplicado(error: unknown): boolean {
