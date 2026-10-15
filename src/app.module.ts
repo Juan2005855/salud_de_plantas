@@ -1,5 +1,4 @@
-﻿
-import { Module } from '@nestjs/common';
+﻿import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -9,6 +8,7 @@ import { SusceptibilidadesModule } from './susceptibilidades/susceptibilidades.m
 import { PlantasModule } from './plantas/plantas.module.js';
 import { EnfermedadesModule } from './enfermedades/enfermedades.module.js';
 import { BrotesModule } from './brotes/brotes.module.js';
+import { EstadisticasModule } from './estadisticas/estadisticas.module.js';
 
 @Module({
   imports: [
@@ -34,6 +34,7 @@ import { BrotesModule } from './brotes/brotes.module.js';
     PlantasModule,
     EnfermedadesModule,
     BrotesModule,
+    EstadisticasModule,
   ],
   controllers: [AppController],
   providers: [AppService],
