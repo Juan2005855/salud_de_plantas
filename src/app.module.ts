@@ -1,14 +1,18 @@
-﻿import { Module } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { AppController } from './app.controller.js';
 import { AppService } from './app.service.js';
+
 import { SusceptibilidadesModule } from './susceptibilidades/susceptibilidades.module.js';
 import { PlantasModule } from './plantas/plantas.module.js';
 import { EnfermedadesModule } from './enfermedades/enfermedades.module.js';
 import { BrotesModule } from './brotes/brotes.module.js';
 import { EstadisticasModule } from './estadisticas/estadisticas.module.js';
+import { CultivosModule } from './cultivos/cultivos.module.js';
+import { TratamientosModule } from './tratamientos/tratamientos.module.js';
+import { PatogenosModule } from './patogenos/patogenos.module.js';
 
 @Module({
   imports: [
@@ -35,6 +39,9 @@ import { EstadisticasModule } from './estadisticas/estadisticas.module.js';
     EnfermedadesModule,
     BrotesModule,
     EstadisticasModule,
+    CultivosModule,
+    TratamientosModule,
+    PatogenosModule,
   ],
   controllers: [AppController],
   providers: [AppService],
