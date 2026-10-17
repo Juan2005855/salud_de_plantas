@@ -1,0 +1,1 @@
+export const TIPOS_CULTIVO = ['hortaliza', 'frutal', 'cereal', 'ornamental', 'otro'] as const;
