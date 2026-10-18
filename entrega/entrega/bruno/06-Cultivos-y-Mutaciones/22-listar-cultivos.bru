@@ -1,0 +1,21 @@
+meta {
+  name: Listar cultivos
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{baseUrl}}/cultivos
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("devuelve la lista de cultivos", function () {
+    expect(res.body.cultivos).to.be.an("array");
+  });
+}

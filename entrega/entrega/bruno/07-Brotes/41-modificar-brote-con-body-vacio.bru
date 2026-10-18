@@ -1,0 +1,19 @@
+meta {
+  name: Modificar brote con body vacio
+  type: http
+  seq: 41
+}
+
+patch {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {}
+}
+
+assert {
+  res.status: eq 400
+}

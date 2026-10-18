@@ -1,0 +1,22 @@
+meta {
+  name: Crear susceptibilidad sin plantaId
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/susceptibilidades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "enfermedadId": 2,
+    "nivel": "media"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

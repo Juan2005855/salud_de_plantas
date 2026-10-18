@@ -1,0 +1,29 @@
+meta {
+  name: Modificar brote
+  type: http
+  seq: 35
+}
+
+patch {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "hectareasAfectadas": 7.25,
+    "region": "Cundinamarca"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cambia hectareas y region", function () {
+    expect(res.body.hectareasAfectadas).to.equal(7.25);
+    expect(res.body.region).to.equal("Cundinamarca");
+  });
+}

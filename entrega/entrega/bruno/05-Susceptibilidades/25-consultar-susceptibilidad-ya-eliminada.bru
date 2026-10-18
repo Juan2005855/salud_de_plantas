@@ -1,0 +1,15 @@
+meta {
+  name: Consultar susceptibilidad ya eliminada
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

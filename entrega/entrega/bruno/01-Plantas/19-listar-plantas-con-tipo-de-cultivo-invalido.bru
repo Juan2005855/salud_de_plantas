@@ -1,0 +1,15 @@
+meta {
+  name: Listar plantas con tipo de cultivo invalido
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/plantas?tipoCultivo=arbol
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Modificar cultivo
+  type: http
+  seq: 38
+}
+
+put {
+  url: {{baseUrl}}/cultivos/{{cultivoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba modificado",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCGTACGTTAGA"
+  }
+}
+
+assert {
+  res.status: eq 200
+}

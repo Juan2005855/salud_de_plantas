@@ -1,0 +1,15 @@
+meta {
+  name: Consultar tratamiento con id no numerico
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/tratamientos/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

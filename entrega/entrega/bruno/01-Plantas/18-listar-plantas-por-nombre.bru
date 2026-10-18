@@ -1,0 +1,21 @@
+meta {
+  name: Listar plantas por nombre
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/plantas?nombreComun=Planta de prueba
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("encuentra la planta creada", function () {
+    expect(res.body.plantas.length).to.be.greaterThan(0);
+  });
+}

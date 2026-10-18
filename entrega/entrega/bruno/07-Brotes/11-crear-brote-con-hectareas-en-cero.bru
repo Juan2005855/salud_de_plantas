@@ -1,0 +1,36 @@
+meta {
+  name: Crear brote con hectareas en cero
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": "2026-10-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": 0
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("hect")).to.equal(true);
+  });
+}
+
+docs {
+  El cliente exige hectareas mayores que cero.
+}

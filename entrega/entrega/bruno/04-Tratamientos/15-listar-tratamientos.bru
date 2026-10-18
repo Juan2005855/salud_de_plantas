@@ -1,0 +1,22 @@
+meta {
+  name: Listar tratamientos
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/tratamientos
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("lista los tratamientos de ejemplo", function () {
+    expect(res.body).to.be.an("array");
+    expect(res.body.length).to.be.at.least(12);
+  });
+}

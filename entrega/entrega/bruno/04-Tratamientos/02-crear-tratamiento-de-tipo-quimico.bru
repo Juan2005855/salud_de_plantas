@@ -1,0 +1,28 @@
+meta {
+  name: Crear tratamiento de tipo quimico
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento quimico de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "quimico",
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("tratamiento_quimico_Id", res.body.id);
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Crear planta con nombre comun vacio
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "   ",
+    "nombreCientifico": "Plantus bruno {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

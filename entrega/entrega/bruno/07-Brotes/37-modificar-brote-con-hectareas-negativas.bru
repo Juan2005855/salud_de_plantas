@@ -1,0 +1,21 @@
+meta {
+  name: Modificar brote con hectareas negativas
+  type: http
+  seq: 37
+}
+
+patch {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "hectareasAfectadas": -1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

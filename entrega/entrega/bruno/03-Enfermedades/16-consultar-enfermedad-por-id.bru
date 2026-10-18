@@ -1,0 +1,15 @@
+meta {
+  name: Consultar enfermedad por id
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/enfermedades/{{enfermedadNuevaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

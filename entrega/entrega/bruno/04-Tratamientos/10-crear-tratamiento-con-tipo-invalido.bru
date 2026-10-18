@@ -1,0 +1,31 @@
+meta {
+  name: Crear tratamiento con tipo invalido
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "organico",
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("tipo")).to.equal(true);
+  });
+}

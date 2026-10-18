@@ -1,0 +1,27 @@
+meta {
+  name: Registrar susceptibilidad temporal
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/susceptibilidades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaTmpId}},
+    "enfermedadId": {{enfermedadTmpId}},
+    "nivel": "baja"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("susceptibilidadTmpId", res.body.id);
+}

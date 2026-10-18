@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar enfermedad sin dependencias
+  type: http
+  seq: 26
+}
+
+delete {
+  url: {{baseUrl}}/enfermedades/{{enfermedadNuevaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

@@ -1,0 +1,29 @@
+meta {
+  name: Registrar brote temporal
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaTmpId}},
+    "enfermedadId": {{enfermedadTmpId}},
+    "fecha": "2026-09-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": 1.5
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("broteTmpId", res.body.id);
+}

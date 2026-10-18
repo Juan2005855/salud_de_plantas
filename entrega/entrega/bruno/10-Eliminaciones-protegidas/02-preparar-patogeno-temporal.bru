@@ -1,0 +1,29 @@
+meta {
+  name: Preparar patogeno temporal
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Patogeno temporal",
+    "nombreCientifico": "Temporalis patogenus {{sufijoT}}",
+    "tipo": "virus",
+    "transmision": "contacto",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("patogenoTmpId", res.body.id);
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Modificar planta inexistente
+  type: http
+  seq: 27
+}
+
+put {
+  url: {{baseUrl}}/plantas/999999
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus bruno {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 404
+}

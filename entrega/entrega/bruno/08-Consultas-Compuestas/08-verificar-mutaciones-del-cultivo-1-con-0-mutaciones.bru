@@ -1,0 +1,22 @@
+meta {
+  name: Verificar mutaciones del cultivo 1 con 0 mutaciones
+  type: http
+  seq: 8
+}
+
+get {
+  url: {{baseUrl}}/cultivos/1/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cuenta 0 mutaciones", function () {
+    expect(res.body.totalMutaciones).to.equal(0);
+    expect(res.body.posicionesMutadas).to.eql([]);
+  });
+}

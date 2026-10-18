@@ -1,0 +1,15 @@
+meta {
+  name: Listar brotes con rango de fechas invertido
+  type: http
+  seq: 28
+}
+
+get {
+  url: {{baseUrl}}/brotes?fechaDesde=2026-12-01&fechaHasta=2026-01-01
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,32 @@
+meta {
+  name: Crear brote con planta inexistente
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 99999,
+    "enfermedadId": 1,
+    "fecha": "2026-10-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("planta")).to.equal(true);
+  });
+}

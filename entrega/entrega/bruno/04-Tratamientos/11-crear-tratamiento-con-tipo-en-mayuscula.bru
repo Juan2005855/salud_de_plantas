@@ -1,0 +1,24 @@
+meta {
+  name: Crear tratamiento con tipo en mayuscula
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "Quimico",
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

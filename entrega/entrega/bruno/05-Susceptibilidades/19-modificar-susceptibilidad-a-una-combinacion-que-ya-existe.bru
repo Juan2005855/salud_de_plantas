@@ -1,0 +1,22 @@
+meta {
+  name: Modificar susceptibilidad a una combinacion que ya existe
+  type: http
+  seq: 19
+}
+
+patch {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 409
+}

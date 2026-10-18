@@ -1,0 +1,22 @@
+meta {
+  name: Consultar patogeno con id inexistente
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/patogenos/99999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("patogeno")).to.equal(true);
+  });
+}

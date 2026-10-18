@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar cultivo 1
+  type: http
+  seq: 44
+}
+
+delete {
+  url: {{baseUrl}}/cultivos/{{cultivoId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

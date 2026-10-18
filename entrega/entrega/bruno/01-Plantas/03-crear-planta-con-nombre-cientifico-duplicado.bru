@@ -1,0 +1,31 @@
+meta {
+  name: Crear planta con nombre cientifico duplicado
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus bruno {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("el mensaje menciona nombre cientifico", function () {
+    expect(JSON.stringify(res.body.message).toLowerCase()).to.include("nombre cientifico");
+  });
+}

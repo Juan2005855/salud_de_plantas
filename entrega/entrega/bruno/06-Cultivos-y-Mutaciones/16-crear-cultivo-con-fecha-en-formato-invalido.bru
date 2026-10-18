@@ -1,0 +1,25 @@
+meta {
+  name: Crear cultivo con fecha en formato invalido
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "15/03/2026",
+    "codigoGeneticoSemilla": "ATGCGTACGTTAGA"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

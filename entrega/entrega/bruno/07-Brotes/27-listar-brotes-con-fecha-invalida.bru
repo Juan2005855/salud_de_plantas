@@ -1,0 +1,15 @@
+meta {
+  name: Listar brotes con fecha invalida
+  type: http
+  seq: 27
+}
+
+get {
+  url: {{baseUrl}}/brotes?fechaDesde=ayer
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

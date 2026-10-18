@@ -1,0 +1,33 @@
+meta {
+  name: Crear cultivo con semilla de otra longitud
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCGTACGT"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("cultivoCortoId", res.body.id);
+}
+
+docs {
+  Es un registro valido: la semilla cumple el formato. El error aparece al verificar mutaciones.
+}

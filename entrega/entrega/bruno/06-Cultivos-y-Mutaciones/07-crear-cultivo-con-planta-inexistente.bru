@@ -1,0 +1,31 @@
+meta {
+  name: Crear cultivo con planta inexistente
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 999999,
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCGTACGTTAGA"
+  }
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("el mensaje menciona planta", function () {
+    expect(JSON.stringify(res.body.message).toLowerCase()).to.include("planta");
+  });
+}

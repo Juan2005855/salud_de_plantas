@@ -1,0 +1,27 @@
+meta {
+  name: Modificar nivel de susceptibilidad
+  type: http
+  seq: 17
+}
+
+patch {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nivel": "alta"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cambia el nivel", function () {
+    expect(res.body.nivel).to.equal("alta");
+  });
+}

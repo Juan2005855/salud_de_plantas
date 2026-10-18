@@ -1,0 +1,24 @@
+meta {
+  name: Crear cultivo sin lote
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCGTACGTTAGA"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

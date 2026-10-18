@@ -1,0 +1,31 @@
+meta {
+  name: Crear patogeno sin transmision
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Patogeno de prueba",
+    "nombreCientifico": "Pathogenus sin {{sufijoP}}",
+    "tipo": "hongo",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("transmision")).to.equal(true);
+  });
+}

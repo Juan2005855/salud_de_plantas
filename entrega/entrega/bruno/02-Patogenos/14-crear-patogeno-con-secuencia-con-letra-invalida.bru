@@ -1,0 +1,25 @@
+meta {
+  name: Crear patogeno con secuencia con letra invalida
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Patogeno de prueba",
+    "nombreCientifico": "Pathogenus s3 {{sufijoP}}",
+    "tipo": "hongo",
+    "transmision": "viento",
+    "secuenciaGenetica": "ATGCX"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

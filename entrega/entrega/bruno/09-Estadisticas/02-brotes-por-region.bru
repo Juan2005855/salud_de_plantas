@@ -1,0 +1,26 @@
+meta {
+  name: Brotes por region
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/estadisticas/brotes/por-region
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("ordenado de mas a menos brotes", function () {
+    expect(res.body).to.be.an("array");
+    for (let i = 1; i < res.body.length; i++) { expect(res.body[i-1].totalBrotes).to.be.at.least(res.body[i].totalBrotes); }
+  });
+  test("Cundinamarca tiene al menos 8 brotes", function () {
+    const f = res.body.find(function (x) { return x.region === "Cundinamarca"; });
+    expect(f.totalBrotes).to.be.at.least(8);
+  });
+}

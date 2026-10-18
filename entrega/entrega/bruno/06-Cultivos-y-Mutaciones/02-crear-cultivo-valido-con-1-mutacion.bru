@@ -1,0 +1,35 @@
+meta {
+  name: Crear cultivo valido con 1 mutacion
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCGTACGTTAGA"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("cultivoId", res.body.id);
+}
+
+tests {
+  test("devuelve el id", function () {
+    expect(res.body.id).to.be.a("number");
+  });
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Listar plantas por tipo de cultivo
+  type: http
+  seq: 17
+}
+
+get {
+  url: http://localhost:3000/plantas?tipoCultivo=cereal
+  body: none
+  auth: none
+}
+
+params:query {
+  tipoCultivo: cereal
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("todas son cereales", function () {
+    expect(res.body.plantas.length).to.be.greaterThan(0);
+    expect(res.body.plantas.every(function (x) { return x.tipoCultivo === "cereal"; })).to.equal(true);
+  });
+}

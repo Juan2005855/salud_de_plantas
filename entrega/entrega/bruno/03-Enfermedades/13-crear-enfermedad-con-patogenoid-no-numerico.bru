@@ -1,0 +1,24 @@
+meta {
+  name: Crear enfermedad con patogenoId no numerico
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Enfermedad de prueba {{sufijoE}}",
+    "descripcionSintomas": "Manchas en las hojas",
+    "epocaRiesgo": "verano",
+    "patogenoId": "abc"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

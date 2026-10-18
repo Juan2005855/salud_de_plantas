@@ -1,0 +1,21 @@
+meta {
+  name: Modificar patogeno con tipo invalido
+  type: http
+  seq: 23
+}
+
+patch {
+  url: {{baseUrl}}/patogenos/{{patogenoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "tipo": "alien"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

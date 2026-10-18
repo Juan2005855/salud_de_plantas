@@ -1,0 +1,15 @@
+meta {
+  name: Detalle de enfermedad con id no numerico
+  type: http
+  seq: 7
+}
+
+get {
+  url: {{baseUrl}}/enfermedades/abc/detalle
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

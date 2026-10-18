@@ -1,0 +1,28 @@
+meta {
+  name: Registrar tratamiento temporal
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento temporal",
+    "descripcionAplicacion": "Aplicar una vez",
+    "tipo": "cultural",
+    "enfermedadId": {{enfermedadTmpId}}
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("tratamientoTmpId", res.body.id);
+}
