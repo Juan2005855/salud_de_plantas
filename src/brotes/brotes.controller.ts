@@ -10,61 +10,121 @@
   Post,
   Query,
 } from '@nestjs/common';
-import { BrotesService } from './brotes.service.js';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 
+import { BrotesService } from './brotes.service.js';
+import { CrearBroteDto } from './dto/crear-brote.dto.js';
+import { ActualizarBroteDto } from './dto/actualizar-brote.dto.js';
+import { FiltrarBroteDto } from './dto/filtrar-brote.dto.js';
+
+@ApiTags('Brotes')
 @Controller('brotes')
 export class BrotesController {
   constructor(private readonly brotesService: BrotesService) {}
 
   @Get('resumen')
+  @ApiOperation({
+    summary: 'Consultar el resumen general de brotes y hectáreas afectadas',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Total de brotes y hectáreas afectadas, con el detalle por región.',
+  })
   obtenerResumen() {
     return this.brotesService.obtenerResumen();
   }
 
   @Get()
-  obtenerFiltrados(
-    @Query('region') region?: string,
-    @Query('fechaDesde') fechaDesde?: string,
-    @Query('fechaHasta') fechaHasta?: string,
-    @Query('plantaId') plantaId?: string,
-    @Query('enfermedadId') enfermedadId?: string,
-  ) {
+  @ApiOperation({
+    summary: 'Listar brotes con filtros opcionales',
+  })
+  @ApiResponse({ status: 200, description: 'Lista de brotes.' })
+  @ApiResponse({
+    status: 400,
+    description: 'Algún filtro tiene un valor inválido.',
+  })
+  obtenerFiltrados(@Query() filtros: FiltrarBroteDto) {
     return this.brotesService.obtenerFiltrados({
-      region,
-      fechaDesde,
-      fechaHasta,
-      plantaId,
-      enfermedadId,
+      region: filtros.region,
+      fechaDesde: filtros.fechaDesde,
+      fechaHasta: filtros.fechaHasta,
+      plantaId: filtros.plantaId,
+      enfermedadId: filtros.enfermedadId,
     });
   }
 
   @Get(':id')
+  @ApiOperation({ summary: 'Consultar un brote por su identificador' })
+  @ApiResponse({ status: 200, description: 'Datos del brote.' })
+  @ApiResponse({
+    status: 400,
+    description: 'El identificador es inválido.',
+  })
+  @ApiResponse({ status: 404, description: 'El brote no existe.' })
   obtenerPorId(@Param('id', ParseIntPipe) id: number) {
     return this.brotesService.obtenerPorId(id);
   }
 
   @Post()
-  crear(@Body() datos: Record<string, unknown>) {
-    return this.brotesService.crear(this.convertirDatos(datos));
+  @ApiOperation({ summary: 'Registrar un brote' })
+  @ApiResponse({
+    status: 201,
+    description: 'Brote creado correctamente.',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Datos inválidos, fecha futura, hectáreas no mayores que cero, o planta o enfermedad inexistente.',
+  })
+  crear(@Body() dto: CrearBroteDto) {
+    return this.brotesService.crear(this.convertirDatos(dto));
   }
 
   @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar un brote' })
+  @ApiResponse({
+    status: 200,
+    description: 'Brote actualizado correctamente.',
+  })
+  @ApiResponse({
+    status: 400,
+    description:
+      'Datos inválidos, fecha futura, hectáreas no mayores que cero, o planta o enfermedad inexistente.',
+  })
+  @ApiResponse({ status: 404, description: 'El brote no existe.' })
   actualizar(
     @Param('id', ParseIntPipe) id: number,
-    @Body() datos: Record<string, unknown>,
+    @Body() dto: ActualizarBroteDto,
   ) {
     return this.brotesService.actualizar(
       id,
-      this.convertirDatos(datos),
+      this.convertirDatos(dto),
     );
   }
 
   @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar un brote' })
+  @ApiResponse({
+    status: 200,
+    description: 'Brote eliminado correctamente.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'El identificador es inválido.',
+  })
+  @ApiResponse({ status: 404, description: 'El brote no existe.' })
   eliminar(@Param('id', ParseIntPipe) id: number) {
     return this.brotesService.eliminar(id);
   }
 
-  private convertirDatos(datos: Record<string, unknown>) {
+  private convertirDatos(dto: CrearBroteDto | ActualizarBroteDto) {
+    const datos = Object.assign({}, dto) as Record<string, unknown>;
+
     const resultado: {
       plantaId?: number;
       enfermedadId?: number;
