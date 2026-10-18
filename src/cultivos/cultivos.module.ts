@@ -1,4 +1,3 @@
-
 import { Module } from '@nestjs/common';
 
 import { CultivosController } from './cultivos.controller.js';
