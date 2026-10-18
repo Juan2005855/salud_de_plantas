@@ -5,6 +5,8 @@
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
+import { validarFechaNoFutura } from '../comun/validadores/validaciones.js';
+
 interface DatosBrote {
   plantaId?: number;
   enfermedadId?: number;
@@ -213,7 +215,7 @@ export class BrotesService {
     }
 
     if (datos.fecha !== undefined) {
-      this.validarFecha(datos.fecha, 'fecha');
+      validarFechaNoFutura(datos.fecha, 'fecha');
       campos.push('fecha = ?');
       parametros.push(datos.fecha);
     }
@@ -312,7 +314,7 @@ export class BrotesService {
     }
 
     if (datos.fecha !== undefined) {
-      this.validarFecha(datos.fecha, 'fecha');
+      validarFechaNoFutura(datos.fecha, 'fecha');
     }
 
     if (datos.region !== undefined) {
@@ -348,12 +350,12 @@ export class BrotesService {
     if (
       typeof hectareas !== 'number' ||
       !Number.isFinite(hectareas) ||
-      hectareas < 0 ||
+      hectareas <= 0 ||
       hectareas > 99999999.99 ||
       Math.round(hectareas * 100) !== hectareas * 100
     ) {
       throw new BadRequestException(
-        'hectareasAfectadas debe ser un número entre 0 y 99999999.99, con máximo dos decimales.',
+        'hectareasAfectadas debe ser un número mayor que 0 y máximo 99999999.99, con máximo dos decimales.',
       );
     }
   }
