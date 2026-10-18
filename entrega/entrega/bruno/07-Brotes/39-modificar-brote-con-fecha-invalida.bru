@@ -1,0 +1,21 @@
+meta {
+  name: Modificar brote con fecha invalida
+  type: http
+  seq: 39
+}
+
+patch {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "fecha": "2026-13-45"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

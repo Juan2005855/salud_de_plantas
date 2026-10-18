@@ -1,0 +1,25 @@
+meta {
+  name: Crear planta con secuencia con espacios
+  type: http
+  seq: 14
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus s4 {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGC GTAC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

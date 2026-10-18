@@ -1,0 +1,22 @@
+meta {
+  name: Listar brotes por rango de fechas
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/brotes?fechaDesde=2026-03-01&fechaHasta=2026-04-30
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("todos caen dentro del rango", function () {
+    expect(res.body.length).to.be.at.least(1);
+    res.body.forEach(function (b) { const f = String(b.fecha).slice(0, 10); expect(f >= "2026-03-01" && f <= "2026-04-30").to.equal(true); });
+  });
+}

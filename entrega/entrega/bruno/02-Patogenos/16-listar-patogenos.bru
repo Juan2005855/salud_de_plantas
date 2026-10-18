@@ -1,0 +1,22 @@
+meta {
+  name: Listar patogenos
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/patogenos
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("lista los patogenos de ejemplo", function () {
+    expect(res.body.patogenos).to.be.an("array");
+    expect(res.body.patogenos.length).to.be.at.least(9);
+  });
+}

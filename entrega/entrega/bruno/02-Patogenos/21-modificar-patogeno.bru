@@ -1,0 +1,29 @@
+meta {
+  name: Modificar patogeno
+  type: http
+  seq: 21
+}
+
+patch {
+  url: {{baseUrl}}/patogenos/{{patogenoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Patogeno modificado",
+    "tipo": "bacteria"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cambia nombre y tipo", function () {
+    expect(res.body.nombre).to.equal("Patogeno modificado");
+    expect(res.body.tipo).to.equal("bacteria");
+  });
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Consultar planta por id
+  type: http
+  seq: 20
+}
+
+get {
+  url: {{baseUrl}}/plantas/{{plantaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("es la planta creada", function () {
+    expect(res.body.id).to.equal(bru.getVar("plantaId"));
+  });
+}

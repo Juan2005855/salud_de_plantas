@@ -1,0 +1,23 @@
+meta {
+  name: Resumen de brotes
+  type: http
+  seq: 31
+}
+
+get {
+  url: {{baseUrl}}/brotes/resumen
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("trae totales y desglose por region", function () {
+    expect(res.body.totalBrotes).to.be.at.least(24);
+    expect(res.body.hectareasAfectadas).to.be.greaterThan(0);
+    expect(res.body.porRegion).to.be.an("array");
+  });
+}

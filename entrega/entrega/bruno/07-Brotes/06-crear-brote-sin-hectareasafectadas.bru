@@ -1,0 +1,24 @@
+meta {
+  name: Crear brote sin hectareasAfectadas
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": "2026-10-01",
+    "region": "Boyaca"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Modificar enfermedad con descripcion vacia
+  type: http
+  seq: 21
+}
+
+patch {
+  url: {{baseUrl}}/enfermedades/{{enfermedadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "descripcionSintomas": "  "
+  }
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,27 @@
+meta {
+  name: Brotes por enfermedad
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/estadisticas/brotes/por-enfermedad
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("ordenado de mas a menos brotes", function () {
+    expect(res.body).to.be.an("array");
+    for (let i = 1; i < res.body.length; i++) { expect(res.body[i-1].totalBrotes).to.be.at.least(res.body[i].totalBrotes); }
+  });
+  test("la roya del cafeto tiene al menos 4 brotes", function () {
+    const f = res.body.find(function (x) { return x.enfermedadId === 6; });
+    expect(f.totalBrotes).to.be.at.least(4);
+    expect(f.hectareasAfectadas).to.be.greaterThan(0);
+  });
+}

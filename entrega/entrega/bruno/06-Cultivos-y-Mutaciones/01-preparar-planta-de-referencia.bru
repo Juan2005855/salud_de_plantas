@@ -1,0 +1,37 @@
+meta {
+  name: Preparar planta de referencia
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta para cultivos",
+    "nombreCientifico": "Cultivus bruno {{sufijoC}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("sufijoC", Date.now().toString());
+}
+
+script:post-response {
+  bru.setVar("plantaRefId", res.body.id);
+}
+
+docs {
+  Crea la planta cuya secuencia de referencia usan los cultivos de esta carpeta, para no depender de datos fijos.
+}

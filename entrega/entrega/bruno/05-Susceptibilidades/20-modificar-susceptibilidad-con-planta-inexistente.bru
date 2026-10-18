@@ -1,0 +1,21 @@
+meta {
+  name: Modificar susceptibilidad con planta inexistente
+  type: http
+  seq: 20
+}
+
+patch {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 99999
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}

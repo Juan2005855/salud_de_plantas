@@ -1,0 +1,26 @@
+meta {
+  name: Brotes por patogeno
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/estadisticas/brotes/por-patogeno
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("ordenado de mas a menos brotes", function () {
+    expect(res.body).to.be.an("array");
+    for (let i = 1; i < res.body.length; i++) { expect(res.body[i-1].totalBrotes).to.be.at.least(res.body[i].totalBrotes); }
+  });
+  test("el patogeno 1 acumula sus dos enfermedades", function () {
+    const f = res.body.find(function (x) { return x.patogenoId === 1; });
+    expect(f.totalBrotes).to.be.at.least(7);
+  });
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Listar brotes por region
+  type: http
+  seq: 22
+}
+
+get {
+  url: {{baseUrl}}/brotes?region=Caldas
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("todos son de Caldas", function () {
+    expect(res.body.length).to.be.at.least(4);
+    res.body.forEach(function (b) { expect(b.region).to.equal("Caldas"); });
+  });
+}

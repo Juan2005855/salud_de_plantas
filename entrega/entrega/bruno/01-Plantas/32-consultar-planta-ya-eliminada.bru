@@ -1,0 +1,15 @@
+meta {
+  name: Consultar planta ya eliminada
+  type: http
+  seq: 32
+}
+
+get {
+  url: {{baseUrl}}/plantas/{{plantaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

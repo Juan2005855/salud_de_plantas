@@ -1,0 +1,21 @@
+meta {
+  name: Resumen general de brotes
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/brotes/resumen
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("trae totales", function () {
+    expect(res.body.totalBrotes).to.be.at.least(24);
+  });
+}

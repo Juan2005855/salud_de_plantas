@@ -1,0 +1,22 @@
+meta {
+  name: Listar enfermedades
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/enfermedades
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("lista las enfermedades de ejemplo", function () {
+    expect(res.body).to.be.an("array");
+    expect(res.body.length).to.be.at.least(9);
+  });
+}

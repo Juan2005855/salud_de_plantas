@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar susceptibilidad con id no numerico
+  type: http
+  seq: 22
+}
+
+delete {
+  url: {{baseUrl}}/susceptibilidades/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

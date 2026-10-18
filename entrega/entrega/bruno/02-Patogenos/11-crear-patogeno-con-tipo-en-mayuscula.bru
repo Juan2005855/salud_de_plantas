@@ -1,0 +1,25 @@
+meta {
+  name: Crear patogeno con tipo en mayuscula
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Patogeno de prueba",
+    "nombreCientifico": "Pathogenus tipo2 {{sufijoP}}",
+    "tipo": "Hongo",
+    "transmision": "viento",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

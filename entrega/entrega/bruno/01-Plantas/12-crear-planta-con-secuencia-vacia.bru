@@ -1,0 +1,25 @@
+meta {
+  name: Crear planta con secuencia vacia
+  type: http
+  seq: 12
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus s2 {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": ""
+  }
+}
+
+assert {
+  res.status: eq 400
+}

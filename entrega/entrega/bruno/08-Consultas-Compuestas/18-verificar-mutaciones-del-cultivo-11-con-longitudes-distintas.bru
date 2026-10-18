@@ -1,0 +1,22 @@
+meta {
+  name: Verificar mutaciones del cultivo 11 con longitudes distintas
+  type: http
+  seq: 18
+}
+
+get {
+  url: {{baseUrl}}/cultivos/11/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("longitud")).to.equal(true);
+  });
+}

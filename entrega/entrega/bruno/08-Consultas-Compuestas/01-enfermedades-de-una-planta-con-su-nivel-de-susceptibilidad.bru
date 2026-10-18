@@ -1,0 +1,27 @@
+meta {
+  name: Enfermedades de una planta con su nivel de susceptibilidad
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/plantas/2/enfermedades
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("trae la planta y sus enfermedades con nivel", function () {
+    expect(res.body.planta.id).to.equal(2);
+    expect(res.body.enfermedades.length).to.be.at.least(5);
+    res.body.enfermedades.forEach(function (x) { expect(["baja","media","alta"]).to.include(x.nivelSusceptibilidad); });
+  });
+}
+
+docs {
+  Consulta compuesta: une plantas, susceptibilidades y enfermedades en una sola respuesta.
+}

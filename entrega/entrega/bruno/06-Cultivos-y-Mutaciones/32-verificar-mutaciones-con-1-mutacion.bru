@@ -1,0 +1,23 @@
+meta {
+  name: Verificar mutaciones con 1 mutacion
+  type: http
+  seq: 32
+}
+
+get {
+  url: {{baseUrl}}/cultivos/{{cultivoId}}/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("hay 1 mutacion en la ultima posicion", function () {
+    expect(res.body.totalMutaciones).to.equal(1);
+    expect(res.body.longitudSecuencia).to.equal(14);
+    expect(res.body.posicionesMutadas).to.eql([14]);
+  });
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Crear cultivo con semilla con espacios
+  type: http
+  seq: 20
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGC GTAC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

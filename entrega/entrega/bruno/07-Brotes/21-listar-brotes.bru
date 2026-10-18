@@ -1,0 +1,22 @@
+meta {
+  name: Listar brotes
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/brotes
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("lista los brotes de ejemplo", function () {
+    expect(res.body).to.be.an("array");
+    expect(res.body.length).to.be.at.least(24);
+  });
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Consultar susceptibilidad con id inexistente
+  type: http
+  seq: 15
+}
+
+get {
+  url: {{baseUrl}}/susceptibilidades/99999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

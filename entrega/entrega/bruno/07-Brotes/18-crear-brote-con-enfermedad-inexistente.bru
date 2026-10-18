@@ -1,0 +1,32 @@
+meta {
+  name: Crear brote con enfermedad inexistente
+  type: http
+  seq: 18
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 99999,
+    "fecha": "2026-10-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("enfermedad")).to.equal(true);
+  });
+}

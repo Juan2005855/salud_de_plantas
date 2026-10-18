@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar brote con id no numerico
+  type: http
+  seq: 43
+}
+
+delete {
+  url: {{baseUrl}}/brotes/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

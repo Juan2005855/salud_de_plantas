@@ -1,0 +1,23 @@
+meta {
+  name: Crear susceptibilidad con nivel en mayuscula
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/susceptibilidades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 9,
+    "enfermedadId": 2,
+    "nivel": "Alta"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

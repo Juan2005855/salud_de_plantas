@@ -1,0 +1,24 @@
+meta {
+  name: Crear tratamiento con enfermedadId no numerico
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "biologico",
+    "enfermedadId": "abc"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

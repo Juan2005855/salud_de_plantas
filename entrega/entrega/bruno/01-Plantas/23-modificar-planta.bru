@@ -1,0 +1,25 @@
+meta {
+  name: Modificar planta
+  type: http
+  seq: 23
+}
+
+put {
+  url: {{baseUrl}}/plantas/{{plantaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "{{nombreCientificoPlanta}}",
+    "familiaBotanica": "Pruebaceae modificada",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 200
+}

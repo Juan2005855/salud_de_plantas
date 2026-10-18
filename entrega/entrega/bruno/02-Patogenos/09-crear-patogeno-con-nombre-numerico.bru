@@ -1,0 +1,25 @@
+meta {
+  name: Crear patogeno con nombre numerico
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": 123,
+    "nombreCientifico": "Pathogenus num {{sufijoP}}",
+    "tipo": "hongo",
+    "transmision": "viento",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

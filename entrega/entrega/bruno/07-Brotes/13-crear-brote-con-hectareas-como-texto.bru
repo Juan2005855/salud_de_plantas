@@ -1,0 +1,25 @@
+meta {
+  name: Crear brote con hectareas como texto
+  type: http
+  seq: 13
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": "2026-10-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": "cinco"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

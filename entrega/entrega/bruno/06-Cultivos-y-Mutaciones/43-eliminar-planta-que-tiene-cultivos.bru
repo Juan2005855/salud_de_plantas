@@ -1,0 +1,21 @@
+meta {
+  name: Eliminar planta que tiene cultivos
+  type: http
+  seq: 43
+}
+
+delete {
+  url: {{baseUrl}}/plantas/{{plantaRefId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("el mensaje menciona cultivos", function () {
+    expect(JSON.stringify(res.body.message).toLowerCase()).to.include("cultivos");
+  });
+}

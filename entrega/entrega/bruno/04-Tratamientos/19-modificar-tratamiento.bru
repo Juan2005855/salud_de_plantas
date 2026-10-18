@@ -1,0 +1,28 @@
+meta {
+  name: Modificar tratamiento
+  type: http
+  seq: 19
+}
+
+patch {
+  url: {{baseUrl}}/tratamientos/{{tratamientoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento modificado",
+    "tipo": "cultural"
+  }
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cambia nombre y tipo", function () {
+    expect(res.body.tipo).to.equal("cultural");
+  });
+}

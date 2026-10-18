@@ -1,0 +1,22 @@
+meta {
+  name: Listar brotes por enfermedad
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/brotes?enfermedadId=6
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("todos son de la enfermedad 6", function () {
+    expect(res.body.length).to.be.at.least(4);
+    res.body.forEach(function (b) { expect(b.enfermedadId).to.equal(6); });
+  });
+}

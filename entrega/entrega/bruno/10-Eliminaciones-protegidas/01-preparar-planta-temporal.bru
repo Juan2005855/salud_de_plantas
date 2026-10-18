@@ -1,0 +1,33 @@
+meta {
+  name: Preparar planta temporal
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta temporal",
+    "nombreCientifico": "Temporalis bruno {{sufijoT}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "otro",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("sufijoT", Date.now().toString());
+}
+
+script:post-response {
+  bru.setVar("plantaTmpId", res.body.id);
+}

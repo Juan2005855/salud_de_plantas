@@ -1,0 +1,21 @@
+meta {
+  name: Verificar mutaciones con longitudes distintas
+  type: http
+  seq: 35
+}
+
+get {
+  url: {{baseUrl}}/cultivos/{{cultivoCortoId}}/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje menciona longitud", function () {
+    expect(JSON.stringify(res.body.message).toLowerCase()).to.include("longitud");
+  });
+}

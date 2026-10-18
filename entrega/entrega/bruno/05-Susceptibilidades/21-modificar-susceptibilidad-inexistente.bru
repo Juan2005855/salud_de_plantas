@@ -1,0 +1,21 @@
+meta {
+  name: Modificar susceptibilidad inexistente
+  type: http
+  seq: 21
+}
+
+patch {
+  url: {{baseUrl}}/susceptibilidades/99999
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nivel": "baja"
+  }
+}
+
+assert {
+  res.status: eq 404
+}

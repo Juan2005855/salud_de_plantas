@@ -1,0 +1,39 @@
+meta {
+  name: Crear enfermedad valida
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Enfermedad de prueba {{sufijoE}}",
+    "descripcionSintomas": "Manchas en las hojas",
+    "epocaRiesgo": "verano",
+    "patogenoId": 1
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:pre-request {
+  bru.setVar("sufijoE", Date.now().toString());
+}
+
+script:post-response {
+  bru.setVar("enfermedadNuevaId", res.body.id);
+}
+
+tests {
+  test("devuelve el id y los datos", function () {
+    expect(res.body.id).to.be.a("number");
+    expect(res.body.epocaRiesgo).to.equal("verano");
+  });
+}

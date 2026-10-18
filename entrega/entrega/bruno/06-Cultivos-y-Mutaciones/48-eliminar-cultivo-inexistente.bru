@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar cultivo inexistente
+  type: http
+  seq: 48
+}
+
+delete {
+  url: {{baseUrl}}/cultivos/999999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

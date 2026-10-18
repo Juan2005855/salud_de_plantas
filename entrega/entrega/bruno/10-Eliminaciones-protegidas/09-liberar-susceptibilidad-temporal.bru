@@ -1,0 +1,15 @@
+meta {
+  name: Liberar susceptibilidad temporal
+  type: http
+  seq: 9
+}
+
+delete {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadTmpId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

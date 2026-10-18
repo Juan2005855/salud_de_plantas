@@ -1,0 +1,23 @@
+meta {
+  name: Crear enfermedad sin nombre
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "descripcionSintomas": "Manchas en las hojas",
+    "epocaRiesgo": "verano",
+    "patogenoId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

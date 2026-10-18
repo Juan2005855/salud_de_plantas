@@ -1,0 +1,21 @@
+meta {
+  name: Modificar brote con planta inexistente
+  type: http
+  seq: 40
+}
+
+patch {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 99999
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}

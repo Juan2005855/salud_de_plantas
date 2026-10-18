@@ -1,0 +1,22 @@
+meta {
+  name: No se elimina una enfermedad con susceptibilidades
+  type: http
+  seq: 8
+}
+
+delete {
+  url: {{baseUrl}}/enfermedades/{{enfermedadTmpId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: in [400, 409]
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("susceptib")).to.equal(true);
+  });
+}

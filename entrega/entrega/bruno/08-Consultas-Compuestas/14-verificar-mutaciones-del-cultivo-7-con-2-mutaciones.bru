@@ -1,0 +1,22 @@
+meta {
+  name: Verificar mutaciones del cultivo 7 con 2 mutaciones
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/cultivos/7/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cuenta 2 mutaciones", function () {
+    expect(res.body.totalMutaciones).to.equal(2);
+    expect(res.body.posicionesMutadas).to.eql([21, 36]);
+  });
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar planta con id no numerico
+  type: http
+  seq: 28
+}
+
+delete {
+  url: {{baseUrl}}/plantas/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

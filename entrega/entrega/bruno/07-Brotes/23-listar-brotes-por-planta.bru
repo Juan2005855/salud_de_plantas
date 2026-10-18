@@ -1,0 +1,22 @@
+meta {
+  name: Listar brotes por planta
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{baseUrl}}/brotes?plantaId=4
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("todos son de la planta 4", function () {
+    expect(res.body.length).to.be.at.least(5);
+    res.body.forEach(function (b) { expect(b.plantaId).to.equal(4); });
+  });
+}

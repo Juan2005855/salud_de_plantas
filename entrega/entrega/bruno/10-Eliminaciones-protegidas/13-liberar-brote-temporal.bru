@@ -1,0 +1,15 @@
+meta {
+  name: Liberar brote temporal
+  type: http
+  seq: 13
+}
+
+delete {
+  url: {{baseUrl}}/brotes/{{broteTmpId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

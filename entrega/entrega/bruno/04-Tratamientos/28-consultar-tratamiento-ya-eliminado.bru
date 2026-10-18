@@ -1,0 +1,15 @@
+meta {
+  name: Consultar tratamiento ya eliminado
+  type: http
+  seq: 28
+}
+
+get {
+  url: {{baseUrl}}/tratamientos/{{tratamientoNuevoId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

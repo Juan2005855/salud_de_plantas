@@ -1,0 +1,21 @@
+meta {
+  name: Modificar susceptibilidad con nivel invalido
+  type: http
+  seq: 18
+}
+
+patch {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nivel": "extrema"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

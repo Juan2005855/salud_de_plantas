@@ -1,0 +1,25 @@
+meta {
+  name: Modificar cultivo inexistente
+  type: http
+  seq: 42
+}
+
+put {
+  url: {{baseUrl}}/cultivos/999999
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCGTACGTTAGA"
+  }
+}
+
+assert {
+  res.status: eq 404
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Crear planta con nombre comun numerico
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": 123,
+    "nombreCientifico": "Plantus bruno {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

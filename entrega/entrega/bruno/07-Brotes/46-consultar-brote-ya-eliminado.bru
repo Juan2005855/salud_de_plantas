@@ -1,0 +1,15 @@
+meta {
+  name: Consultar brote ya eliminado
+  type: http
+  seq: 46
+}
+
+get {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

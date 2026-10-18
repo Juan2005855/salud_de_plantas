@@ -1,0 +1,15 @@
+meta {
+  name: No se elimina una planta de ejemplo con susceptibilidades, cultivos y brotes
+  type: http
+  seq: 20
+}
+
+delete {
+  url: {{baseUrl}}/plantas/1
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 409
+}

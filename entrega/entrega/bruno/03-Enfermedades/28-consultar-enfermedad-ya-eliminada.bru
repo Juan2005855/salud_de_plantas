@@ -1,0 +1,15 @@
+meta {
+  name: Consultar enfermedad ya eliminada
+  type: http
+  seq: 28
+}
+
+get {
+  url: {{baseUrl}}/enfermedades/{{enfermedadNuevaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Crear brote con plantaId no numerico
+  type: http
+  seq: 19
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": "abc",
+    "enfermedadId": 1,
+    "fecha": "2026-10-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: eq 400
+}

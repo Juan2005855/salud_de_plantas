@@ -1,0 +1,35 @@
+meta {
+  name: Crear tratamiento valido
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "biologico",
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("tratamientoNuevoId", res.body.id);
+}
+
+tests {
+  test("devuelve el id y el tipo", function () {
+    expect(res.body.id).to.be.a("number");
+    expect(res.body.tipo).to.equal("biologico");
+  });
+}

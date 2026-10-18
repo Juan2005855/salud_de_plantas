@@ -1,0 +1,22 @@
+meta {
+  name: Listar cultivos por region
+  type: http
+  seq: 24
+}
+
+get {
+  url: {{baseUrl}}/cultivos?plantaId={{plantaRefId}}&region=Boyaca
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("todos son de Boyaca", function () {
+    expect(res.body.cultivos.length).to.equal(4);
+    expect(res.body.cultivos.every(function (x) { return x.region === "Boyaca"; })).to.equal(true);
+  });
+}

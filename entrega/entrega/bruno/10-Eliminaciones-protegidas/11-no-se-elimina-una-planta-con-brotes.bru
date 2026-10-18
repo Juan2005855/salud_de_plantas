@@ -1,0 +1,22 @@
+meta {
+  name: No se elimina una planta con brotes
+  type: http
+  seq: 11
+}
+
+delete {
+  url: {{baseUrl}}/plantas/{{plantaTmpId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("brote")).to.equal(true);
+  });
+}

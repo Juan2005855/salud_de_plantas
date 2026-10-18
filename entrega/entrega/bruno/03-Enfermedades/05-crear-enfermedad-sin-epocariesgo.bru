@@ -1,0 +1,23 @@
+meta {
+  name: Crear enfermedad sin epocaRiesgo
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Enfermedad de prueba {{sufijoE}}",
+    "descripcionSintomas": "Manchas en las hojas",
+    "patogenoId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

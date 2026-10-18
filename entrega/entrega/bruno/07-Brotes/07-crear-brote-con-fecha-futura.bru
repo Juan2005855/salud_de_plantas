@@ -1,0 +1,36 @@
+meta {
+  name: Crear brote con fecha futura
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": "2099-01-01",
+    "region": "Boyaca",
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("fecha")).to.equal(true);
+  });
+}
+
+docs {
+  El cliente exige que la fecha no sea posterior al dia del registro.
+}

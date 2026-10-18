@@ -1,0 +1,29 @@
+meta {
+  name: Crear cultivo con 3 mutaciones
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "TTGCGAACGTTAGG"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("cultivoMutadoId", res.body.id);
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Enfermedades de una planta inexistente
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/plantas/99999/enfermedades
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

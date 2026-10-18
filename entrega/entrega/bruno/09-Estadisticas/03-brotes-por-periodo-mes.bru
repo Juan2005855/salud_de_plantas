@@ -1,0 +1,23 @@
+meta {
+  name: Brotes por periodo (mes)
+  type: http
+  seq: 3
+}
+
+get {
+  url: {{baseUrl}}/estadisticas/brotes/por-periodo
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("periodos con formato AAAA-MM en orden", function () {
+    expect(res.body).to.be.an("array");
+    res.body.forEach(function (x) { expect(x.periodo).to.match(/^\d{4}-\d{2}$/); });
+    for (let i = 1; i < res.body.length; i++) { expect(res.body[i-1].periodo < res.body[i].periodo).to.equal(true); }
+  });
+}

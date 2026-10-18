@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar planta sin cultivos
+  type: http
+  seq: 49
+}
+
+delete {
+  url: {{baseUrl}}/plantas/{{plantaRefId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

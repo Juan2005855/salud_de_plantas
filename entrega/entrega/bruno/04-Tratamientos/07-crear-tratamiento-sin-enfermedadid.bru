@@ -1,0 +1,23 @@
+meta {
+  name: Crear tratamiento sin enfermedadId
+  type: http
+  seq: 7
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "biologico"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

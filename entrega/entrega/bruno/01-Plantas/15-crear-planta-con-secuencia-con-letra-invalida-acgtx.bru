@@ -1,0 +1,25 @@
+meta {
+  name: Crear planta con secuencia con letra invalida ACGTX
+  type: http
+  seq: 15
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus s5 {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ACGTX"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

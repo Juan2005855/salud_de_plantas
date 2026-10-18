@@ -1,0 +1,25 @@
+meta {
+  name: Modificar planta con tipo invalido
+  type: http
+  seq: 26
+}
+
+put {
+  url: {{baseUrl}}/plantas/{{plantaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "{{nombreCientificoPlanta}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "arbol",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

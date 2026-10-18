@@ -1,0 +1,23 @@
+meta {
+  name: Crear enfermedad sin descripcionSintomas
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Enfermedad de prueba {{sufijoE}}",
+    "epocaRiesgo": "verano",
+    "patogenoId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,25 @@
+meta {
+  name: Modificar cultivo con semilla invalida
+  type: http
+  seq: 40
+}
+
+put {
+  url: {{baseUrl}}/cultivos/{{cultivoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15",
+    "codigoGeneticoSemilla": "ATGCX"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar susceptibilidad
+  type: http
+  seq: 24
+}
+
+delete {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

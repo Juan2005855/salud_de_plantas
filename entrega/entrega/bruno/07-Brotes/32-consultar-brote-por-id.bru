@@ -1,0 +1,15 @@
+meta {
+  name: Consultar brote por id
+  type: http
+  seq: 32
+}
+
+get {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
