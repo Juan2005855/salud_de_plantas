@@ -62,11 +62,7 @@ export class CultivosService {
   }
 
   private validarAdn(secuencia: string): void {
-    if (!validarSecuenciaAdn(secuencia)) {
-      throw new BadRequestException(
-        'El código genético debe contener únicamente las letras A, C, G y T en mayúsculas, y no puede estar vacío.',
-      );
-    }
+    validarSecuenciaAdn(secuencia, 'secuencia de ADN');
   }
 
   private async comprobarPlanta(plantaId: number): Promise<void> {
@@ -273,14 +269,15 @@ export class CultivosService {
     const secuenciaReferencia: string = planta.secuenciaGenetica;
     const secuenciaSemilla: string = cultivo.codigoGeneticoSemilla;
 
-    if (
-      !validarSecuenciaAdn(secuenciaReferencia) ||
-      !validarSecuenciaAdn(secuenciaSemilla)
-    ) {
-      throw new BadRequestException(
-        'Las secuencias de ADN deben contener únicamente A, C, G y T en mayúsculas, y no pueden estar vacías.',
-      );
-    }
+    validarSecuenciaAdn(
+      secuenciaReferencia,
+      'secuencia genética de referencia',
+    );
+
+    validarSecuenciaAdn(
+      secuenciaSemilla,
+      'secuencia genética de la semilla',
+    );
 
     if (secuenciaReferencia.length !== secuenciaSemilla.length) {
       throw new BadRequestException(
@@ -307,3 +304,4 @@ export class CultivosService {
     };
   }
 }
+

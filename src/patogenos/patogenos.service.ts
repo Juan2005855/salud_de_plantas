@@ -1,4 +1,5 @@
 
+
 import {
   BadRequestException,
   ConflictException,
@@ -7,6 +8,7 @@ import {
   InternalServerErrorException,
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
+
 import { TIPOS_PATOGENO } from './tipos-patogeno.js';
 import { CrearPatogenoDto } from './dto/crear-patogeno.dto.js';
 import { ActualizarPatogenoDto } from './dto/actualizar-patogeno.dto.js';
@@ -54,19 +56,19 @@ export class PatogenosService {
 
     if (
       datos.tipo !== undefined &&
-      !TIPOS_PATOGENO.includes(datos.tipo as (typeof TIPOS_PATOGENO)[number])
+      !TIPOS_PATOGENO.includes(
+        datos.tipo as (typeof TIPOS_PATOGENO)[number],
+      )
     ) {
       throw new BadRequestException(
         `El tipo debe ser uno de los siguientes: ${TIPOS_PATOGENO.join(', ')}.`,
       );
     }
 
-    if (
-      datos.secuenciaGenetica !== undefined &&
-      !validarSecuenciaAdn(datos.secuenciaGenetica)
-    ) {
-      throw new BadRequestException(
-        'La secuencia genética debe contener únicamente A, C, G y T en mayúsculas, y no puede estar vacía.',
+    if (datos.secuenciaGenetica !== undefined) {
+      validarSecuenciaAdn(
+        datos.secuenciaGenetica,
+        'secuencia genética',
       );
     }
   }
@@ -126,7 +128,9 @@ export class PatogenosService {
   async crear(dto: CrearPatogenoDto) {
     this.validarDatos(dto, true);
 
-    await this.validarNombreCientifico(dto.nombreCientifico.trim());
+    await this.validarNombreCientifico(
+      dto.nombreCientifico.trim(),
+    );
 
     const resultado = await this.dataSource.query(
       `INSERT INTO patogenos
@@ -141,7 +145,7 @@ export class PatogenosService {
       ],
     );
 
-    // MySQL puede devolver el identificador dentro de insertId.
+    // Comprueba que MySQL haya devuelto el identificador insertado.
     const idInsertado = resultado?.insertId;
     const id = Number(idInsertado);
 
@@ -180,7 +184,10 @@ export class PatogenosService {
 
       if (valor !== undefined) {
         if (campo === 'nombreCientifico') {
-          await this.validarNombreCientifico(valor.trim(), id);
+          await this.validarNombreCientifico(
+            valor.trim(),
+            id,
+          );
         }
 
         asignaciones.push(`${campo} = ?`);

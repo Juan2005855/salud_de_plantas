@@ -1,3 +1,4 @@
+
 import {
   BadRequestException,
   Injectable,
@@ -75,13 +76,11 @@ export class PlantasService {
       );
     }
 
-    if (
-      dto.secuenciaGenetica !== undefined &&
-      (typeof dto.secuenciaGenetica !== 'string' ||
-        !validarSecuenciaAdn(dto.secuenciaGenetica))
-    ) {
-      throw new BadRequestException(
-        'La secuencia genética debe contener únicamente A, C, G y T en mayúsculas, y no puede estar vacía.',
+    // El validador compartido devuelve la secuencia o lanza una excepción.
+    if (dto.secuenciaGenetica !== undefined) {
+      validarSecuenciaAdn(
+        dto.secuenciaGenetica,
+        'secuencia genética',
       );
     }
   }
