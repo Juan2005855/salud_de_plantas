@@ -1,162 +1,249 @@
+
+
 import {
   BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
+  InternalServerErrorException,
 } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { validarSecuenciaAdn } from '../comun/validadores/validador-secuencia-adn.js';
-import { ActualizarPatogenoDto } from './dto/actualizar-patogeno.dto.js';
-import { CrearPatogenoDto } from './dto/crear-patogeno.dto.js';
-import { ListarPatogenosOutDto } from './dto/listar-patogenos-out.dto.js';
-import { PatogenoOutDto } from './dto/patogeno-out.dto.js';
-import { Patogeno } from './patogeno.entity.js';
-import type { PatogenosServiceInterface } from './patogenos-service-interface.js';
+import { DataSource } from 'typeorm';
+
 import { TIPOS_PATOGENO } from './tipos-patogeno.js';
+import { CrearPatogenoDto } from './dto/crear-patogeno.dto.js';
+import { ActualizarPatogenoDto } from './dto/actualizar-patogeno.dto.js';
+import { validarSecuenciaAdn } from '../comun/validadores/validador-secuencia-adn.js';
 
 @Injectable()
-export class PatogenosService implements PatogenosServiceInterface {
-  constructor(
-    @InjectRepository(Patogeno)
-    private readonly patogenosRepository: Repository<Patogeno>,
-  ) {}
+export class PatogenosService {
+  constructor(private readonly dataSource: DataSource) {}
 
-  async crearPatogeno(datos: CrearPatogenoDto): Promise<PatogenoOutDto> {
-    this.validarDatos(datos);
-    await this.validarNombreCientificoUnico(datos.nombreCientifico);
-    const patogeno = this.patogenosRepository.create({
-      nombre: datos.nombre,
-      nombreCientifico: datos.nombreCientifico,
-      tipo: datos.tipo,
-      transmision: datos.transmision,
-      secuenciaGenetica: datos.secuenciaGenetica,
-    });
-    const guardado = await this.patogenosRepository.save(patogeno);
-    return this.mapear(guardado);
-  }
-
-  async obtenerPatogeno(id: number): Promise<PatogenoOutDto> {
-    const idValido = this.validarId(id);
-    const patogeno = await this.patogenosRepository.findOneBy({ id: idValido });
-    if (!patogeno) {
-      throw new NotFoundException(`Patógeno con id ${idValido} no encontrado`);
-    }
-    return this.mapear(patogeno);
-  }
-
-  async listarPatogenos(tipo?: string): Promise<ListarPatogenosOutDto> {
-    if (tipo !== undefined && !TIPOS_PATOGENO.includes(tipo)) {
+  private validarId(id: number): void {
+    if (!Number.isInteger(id) || id <= 0) {
       throw new BadRequestException(
-        `El tipo debe ser uno de: ${TIPOS_PATOGENO.join(', ')}`,
+        'El identificador debe ser un número entero positivo.',
       );
     }
-    const patogenos = await this.patogenosRepository.find({
-      where: tipo ? { tipo } : {},
-      order: { id: 'ASC' },
-    });
-    return { patogenos: patogenos.map((patogeno) => this.mapear(patogeno)) };
   }
 
-  async actualizarPatogeno(
-    id: number,
-    datos: ActualizarPatogenoDto,
-  ): Promise<PatogenoOutDto> {
-    const idValido = this.validarId(id);
-    this.validarDatos(datos);
-    await this.validarNombreCientificoUnico(datos.nombreCientifico, idValido);
-    const resultado = await this.patogenosRepository.update(idValido, {
-      nombre: datos.nombre,
-      nombreCientifico: datos.nombreCientifico,
-      tipo: datos.tipo,
-      transmision: datos.transmision,
-      secuenciaGenetica: datos.secuenciaGenetica,
-    });
-    if (resultado.affected === 0) {
-      throw new NotFoundException(`Patógeno con id ${idValido} no encontrado`);
-    }
-    return this.obtenerPatogeno(idValido);
-  }
-
-  async eliminarPatogeno(id: number): Promise<void> {
-    const idValido = this.validarId(id);
-    const resultado = await this.patogenosRepository.delete(idValido);
-    if (resultado.affected === 0) {
-      throw new NotFoundException(`Patógeno con id ${idValido} no encontrado`);
-    }
-  }
-
-  private validarId(id: number): number {
-    const numero = Number(id);
-    if (!Number.isInteger(numero) || numero <= 0) {
-      throw new BadRequestException('El id debe ser un número entero positivo');
-    }
-    return numero;
-  }
-
-  private esTextoValido(valor: unknown, maximo: number): boolean {
-    return (
-      typeof valor === 'string' &&
-      valor.trim().length > 0 &&
-      valor.trim().length <= maximo
-    );
-  }
-
-  private validarDatos(datos: CrearPatogenoDto | ActualizarPatogenoDto): void {
-    if (!datos || typeof datos !== 'object') {
-      throw new BadRequestException('El cuerpo de la petición es obligatorio');
-    }
-    const errores: string[] = [];
-    if (!this.esTextoValido(datos.nombre, 100)) {
-      errores.push(
-        'El nombre es obligatorio y debe tener máximo 100 caracteres',
+  private validarTexto(valor: unknown, campo: string): void {
+    if (typeof valor !== 'string' || valor.trim().length === 0) {
+      throw new BadRequestException(
+        `${campo} es obligatorio y debe contener texto.`,
       );
     }
-    if (!this.esTextoValido(datos.nombreCientifico, 150)) {
-      errores.push(
-        'El nombre científico es obligatorio y debe tener máximo 150 caracteres',
+  }
+
+  private validarDatos(
+    datos: CrearPatogenoDto | ActualizarPatogenoDto,
+    esCreacion: boolean,
+  ): void {
+    const camposTexto = [
+      'nombre',
+      'nombreCientifico',
+      'tipo',
+      'transmision',
+      'secuenciaGenetica',
+    ] as const;
+
+    for (const campo of camposTexto) {
+      const valor = datos[campo];
+
+      if (esCreacion || valor !== undefined) {
+        this.validarTexto(valor, campo);
+      }
+    }
+
+    if (
+      datos.tipo !== undefined &&
+      !TIPOS_PATOGENO.includes(
+        datos.tipo as (typeof TIPOS_PATOGENO)[number],
+      )
+    ) {
+      throw new BadRequestException(
+        `El tipo debe ser uno de los siguientes: ${TIPOS_PATOGENO.join(', ')}.`,
       );
     }
-    if (!TIPOS_PATOGENO.includes(datos.tipo)) {
-      errores.push(`El tipo debe ser uno de: ${TIPOS_PATOGENO.join(', ')}`);
-    }
-    if (!this.esTextoValido(datos.transmision, 100)) {
-      errores.push(
-        'La transmisión es obligatoria y debe tener máximo 100 caracteres',
+
+    if (datos.secuenciaGenetica !== undefined) {
+      validarSecuenciaAdn(
+        datos.secuenciaGenetica,
+        'secuencia genética',
       );
-    }
-    if (!validarSecuenciaAdn(datos.secuenciaGenetica)) {
-      errores.push(
-        'La secuencia genética es obligatoria y solo puede contener las letras A, C, G y T',
-      );
-    }
-    if (errores.length > 0) {
-      throw new BadRequestException(errores);
     }
   }
 
-  private async validarNombreCientificoUnico(
+  private async validarNombreCientifico(
     nombreCientifico: string,
-    idActual?: number,
+    idExcluir?: number,
   ): Promise<void> {
-    const existente = await this.patogenosRepository.findOneBy({
-      nombreCientifico,
-    });
-    if (existente && existente.id !== idActual) {
+    const parametros: unknown[] = [nombreCientifico];
+
+    let sql = 'SELECT id FROM patogenos WHERE nombreCientifico = ?';
+
+    if (idExcluir !== undefined) {
+      sql += ' AND id <> ?';
+      parametros.push(idExcluir);
+    }
+
+    const encontrados: { id: number }[] =
+      await this.dataSource.query(sql, parametros);
+
+    if (encontrados.length > 0) {
       throw new ConflictException(
-        `Ya existe un patógeno con el nombre científico ${nombreCientifico}`,
+        'Ya existe un patógeno con ese nombre científico.',
       );
     }
   }
 
-  private mapear(patogeno: Patogeno): PatogenoOutDto {
+  async listar(): Promise<{ patogenos: unknown[] }> {
+    const patogenos = await this.dataSource.query(
+      `SELECT id, nombre, nombreCientifico, tipo, transmision, secuenciaGenetica
+       FROM patogenos
+       ORDER BY id`,
+    );
+
+    return { patogenos };
+  }
+
+  async obtenerPorId(id: number) {
+    this.validarId(id);
+
+    const resultados = await this.dataSource.query(
+      `SELECT id, nombre, nombreCientifico, tipo, transmision, secuenciaGenetica
+       FROM patogenos
+       WHERE id = ?`,
+      [id],
+    );
+
+    if (resultados.length === 0) {
+      throw new NotFoundException(
+        `No existe el patógeno con identificador ${id}.`,
+      );
+    }
+
+    return resultados[0];
+  }
+
+  async crear(dto: CrearPatogenoDto) {
+    this.validarDatos(dto, true);
+
+    await this.validarNombreCientifico(
+      dto.nombreCientifico.trim(),
+    );
+
+    const resultado = await this.dataSource.query(
+      `INSERT INTO patogenos
+       (nombre, nombreCientifico, tipo, transmision, secuenciaGenetica)
+       VALUES (?, ?, ?, ?, ?)`,
+      [
+        dto.nombre.trim(),
+        dto.nombreCientifico.trim(),
+        dto.tipo,
+        dto.transmision.trim(),
+        dto.secuenciaGenetica,
+      ],
+    );
+
+    // Comprueba que MySQL haya devuelto el identificador insertado.
+    const idInsertado = resultado?.insertId;
+    const id = Number(idInsertado);
+
+    if (
+      idInsertado === undefined ||
+      idInsertado === null ||
+      !Number.isInteger(id) ||
+      id <= 0
+    ) {
+      throw new InternalServerErrorException(
+        'El patógeno se insertó, pero no se pudo recuperar su identificador.',
+      );
+    }
+
+    return this.obtenerPorId(id);
+  }
+
+  async actualizar(id: number, dto: ActualizarPatogenoDto) {
+    this.validarId(id);
+    await this.obtenerPorId(id);
+    this.validarDatos(dto, false);
+
+    const camposPermitidos = [
+      'nombre',
+      'nombreCientifico',
+      'tipo',
+      'transmision',
+      'secuenciaGenetica',
+    ] as const;
+
+    const asignaciones: string[] = [];
+    const parametros: unknown[] = [];
+
+    for (const campo of camposPermitidos) {
+      const valor = dto[campo];
+
+      if (valor !== undefined) {
+        if (campo === 'nombreCientifico') {
+          await this.validarNombreCientifico(
+            valor.trim(),
+            id,
+          );
+        }
+
+        asignaciones.push(`${campo} = ?`);
+
+        parametros.push(
+          typeof valor === 'string' &&
+          campo !== 'tipo' &&
+          campo !== 'secuenciaGenetica'
+            ? valor.trim()
+            : valor,
+        );
+      }
+    }
+
+    if (asignaciones.length === 0) {
+      throw new BadRequestException(
+        'Debes enviar al menos un campo para actualizar.',
+      );
+    }
+
+    parametros.push(id);
+
+    await this.dataSource.query(
+      `UPDATE patogenos
+       SET ${asignaciones.join(', ')}
+       WHERE id = ?`,
+      parametros,
+    );
+
+    return this.obtenerPorId(id);
+  }
+
+  async eliminar(id: number) {
+    this.validarId(id);
+    await this.obtenerPorId(id);
+
+    const dependencias: { total: number }[] =
+      await this.dataSource.query(
+        'SELECT COUNT(*) AS total FROM enfermedades WHERE patogenoId = ?',
+        [id],
+      );
+
+    if (Number(dependencias[0]?.total ?? 0) > 0) {
+      throw new BadRequestException(
+        'No se puede eliminar el patógeno porque tiene enfermedades asociadas.',
+      );
+    }
+
+    await this.dataSource.query(
+      'DELETE FROM patogenos WHERE id = ?',
+      [id],
+    );
+
     return {
-      id: patogeno.id,
-      nombre: patogeno.nombre,
-      nombreCientifico: patogeno.nombreCientifico,
-      tipo: patogeno.tipo,
-      transmision: patogeno.transmision,
-      secuenciaGenetica: patogeno.secuenciaGenetica,
+      mensaje: 'Patógeno eliminado correctamente.',
+      id,
     };
   }
 }

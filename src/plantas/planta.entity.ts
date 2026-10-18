@@ -1,24 +1,33 @@
-import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
+﻿import { Column, Entity, PrimaryGeneratedColumn, Unique } from 'typeorm';
 import { TIPOS_CULTIVO } from '../comun/constantes/valores-permitidos.js';
 
 @Entity('plantas')
 @Unique('UQ_plantas_nombre_cientifico', ['nombreCientifico'])
 export class Planta {
-    @PrimaryGeneratedColumn()
-    id: number;
+  @PrimaryGeneratedColumn()
+  id!: number;
 
-    @Column({ type: 'varchar', length: 100 })
-    nombreComun: string;
+  @Column({ name: 'nombreComun', type: 'varchar', length: 100 })
+  nombreComun!: string;
 
-    @Column({ type: 'varchar', length: 150 })
-    nombreCientifico: string;
+  @Column({
+    name: 'nombreCientifico',
+    type: 'varchar',
+    length: 150,
+    unique: true,
+  })
+  nombreCientifico!: string;
 
-    @Column({ type: 'varchar', length: 100 })
-    familiaBotanica: string;
+  @Column({ name: 'familiaBotanica', type: 'varchar', length: 100 })
+  familiaBotanica!: string;
 
-    @Column({ type: 'enum', enum: [...TIPOS_CULTIVO] })
-    tipoCultivo: string;
+  @Column({
+    name: 'tipoCultivo',
+    type: 'enum',
+    enum: [...TIPOS_CULTIVO],
+  })
+  tipoCultivo!: string;
 
-    @Column({ type: 'longtext' })
-    secuenciaGenetica: string;
+  @Column({ name: 'secuenciaGenetica', type: 'longtext' })
+  secuenciaGenetica!: string;
 }

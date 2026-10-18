@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+﻿import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PlantasService } from './plantas.service.js';
 import { PLANTAS_SERVICE } from './tokens.js';
@@ -11,7 +11,7 @@ import { Cultivo } from '../cultivos/cultivo.entity.js';
   providers: [
     {
       provide: PLANTAS_SERVICE,
-      useClass: PlantasService
+      useClass: PlantasService,
     },
   ],
   controllers: [PlantasController],
