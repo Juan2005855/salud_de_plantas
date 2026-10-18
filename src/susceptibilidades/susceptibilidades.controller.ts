@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -14,7 +13,7 @@ import { SusceptibilidadesService } from './susceptibilidades.service.js';
 import { CrearSusceptibilidadDto } from './dto/crear-susceptibilidad.dto.js';
 import { ActualizarSusceptibilidadDto } from './dto/actualizar-susceptibilidad.dto.js';
 
-@Controller('susceptibilities')
+@Controller('susceptibilidades')
 export class SusceptibilidadesController {
   constructor(
     private readonly susceptibilidadesService: SusceptibilidadesService,
