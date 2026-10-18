@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -20,7 +19,7 @@ import { CrearPatogenoDto } from './dto/crear-patogeno.dto.js';
 import { ActualizarPatogenoDto } from './dto/actualizar-patogeno.dto.js';
 
 @ApiTags('Patógenos')
-@Controller('pathogens')
+@Controller('patogenos')
 export class PatogenosController {
   constructor(
     private readonly patogenosService: PatogenosService,
