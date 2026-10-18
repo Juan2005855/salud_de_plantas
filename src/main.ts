@@ -28,4 +28,4 @@ async function iniciarAplicacion() {
   console.log(`Documentación Swagger en http://localhost:${puerto}/api/documentacion`);
 }
 
-iniciarAplicacion();
+void iniciarAplicacion();
