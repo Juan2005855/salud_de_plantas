@@ -1,6 +1,5 @@
-
 export class CrearSusceptibilidadDto {
-  plantId!: number;
-  diseaseId!: number;
-  level!: string;
+  plantaId!: number;
+  enfermedadId!: number;
+  nivel!: string;
 }
