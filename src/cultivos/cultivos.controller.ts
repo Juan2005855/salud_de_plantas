@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -22,7 +21,7 @@ import { ActualizarCultivoDto } from './dto/actualizar-cultivo.dto.js';
 import { FiltrarCultivoDto } from './dto/filtrar-cultivo.dto.js';
 
 @ApiTags('Cultivos')
-@Controller('crops')
+@Controller('cultivos')
 export class CultivosController {
   constructor(
     private readonly cultivosService: CultivosService,
@@ -42,7 +41,7 @@ export class CultivosController {
     return this.cultivosService.listar(filtros);
   }
 
-  @Get(':id/mutations')
+  @Get(':id/mutaciones')
   @ApiOperation({
     summary: 'Calcular las mutaciones del ADN de un cultivo',
   })

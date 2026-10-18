@@ -1,28 +1,28 @@
 ﻿import { Controller, Get } from '@nestjs/common';
 import { EstadisticasService } from './estadisticas.service.js';
 
-@Controller('statistics/outbreaks')
+@Controller('estadisticas/brotes')
 export class EstadisticasController {
   constructor(
     private readonly estadisticasService: EstadisticasService,
   ) {}
 
-  @Get('by-disease')
+  @Get('por-enfermedad')
   porEnfermedad() {
     return this.estadisticasService.porEnfermedad();
   }
 
-  @Get('by-region')
+  @Get('por-region')
   porRegion() {
     return this.estadisticasService.porRegion();
   }
 
-  @Get('by-period')
+  @Get('por-periodo')
   porPeriodo() {
     return this.estadisticasService.porPeriodo();
   }
 
-  @Get('by-plant')
+  @Get('por-planta')
   porPlanta() {
     return this.estadisticasService.porPlanta();
   }

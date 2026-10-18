@@ -1,4 +1,3 @@
-
 import {
   Column,
   Entity,
@@ -9,23 +8,23 @@ import {
 @Entity('susceptibilidades')
 @Index(
   'UQ_susceptibilidades_planta_enfermedad',
-  ['plantId', 'diseaseId'],
+  ['plantaId', 'enfermedadId'],
   { unique: true },
 )
-export class Susceptibility {
+export class Susceptibilidad {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column({ name: 'plantaId', type: 'int' })
-  plantId!: number;
+  plantaId!: number;
 
   @Column({ name: 'enfermedadId', type: 'int' })
-  diseaseId!: number;
+  enfermedadId!: number;
 
   @Column({
     name: 'nivel',
     type: 'enum',
     enum: ['baja', 'media', 'alta'],
   })
-  level!: string;
+  nivel!: string;
 }

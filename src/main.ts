@@ -18,14 +18,14 @@ async function iniciarAplicacion() {
     configuracionSwagger,
   );
 
-  SwaggerModule.setup('api/docs', app, documento);
+  SwaggerModule.setup('api/documentacion', app, documento);
 
   const puerto = process.env.PORT ?? 3000;
 
   await app.listen(puerto);
 
   console.log(`Aplicación ejecutándose en http://localhost:${puerto}`);
-  console.log(`Documentación Swagger en http://localhost:${puerto}/api/docs`);
+  console.log(`Documentación Swagger en http://localhost:${puerto}/api/documentacion`);
 }
 
 iniciarAplicacion();
