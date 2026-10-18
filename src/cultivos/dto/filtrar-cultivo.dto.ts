@@ -1,7 +1,7 @@
-export class FiltrarCultivosInDto {
-    plantaId?: string;
-    region?: string;
-    lote?: string;
-    desde?: string;
-    hasta?: string;
+
+export class FiltrarCultivoDto {
+  plantaId?: number;
+  region?: string;
+  fechaDesde?: string;
+  fechaHasta?: string;
 }

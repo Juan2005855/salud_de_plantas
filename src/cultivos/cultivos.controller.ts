@@ -1,84 +1,141 @@
-import { Body, Controller, Delete, Get, Inject, Param, Post, Put, Query } from '@nestjs/common';
-import { ApiBody, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CULTIVOS_SERVICE } from './tokens.js';
-import type { CultivosServiceInterface } from './cultivos-service-interface.js';
-import { CrearCultivoInDto } from './dto/crear-cultivo-in-dto.js';
-import { CrearCultivoOutDto } from './dto/crear-cultivo-out-dto.js';
-import { ActualizarCultivoInDto } from './dto/actualizar-cultivo-in-dto.js';
-import { ObtenerCultivoOutDto } from './dto/obtener-cultivo-out-dto.js';
-import { ObtenerCultivosOutDto } from './dto/obtener-cultivos-out-dto.js';
-import { validarIdParametro } from '../comun/validadores/validaciones.js';
-import { VerificarMutacionesOutDto } from './dto/verificar-mutaciones-out-dto.js';
 
-@ApiTags('cultivos')
-@Controller('cultivos')
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import {
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+
+import { CultivosService } from './cultivos.service.js';
+import { CrearCultivoDto } from './dto/crear-cultivo.dto.js';
+import { ActualizarCultivoDto } from './dto/actualizar-cultivo.dto.js';
+import { FiltrarCultivoDto } from './dto/filtrar-cultivo.dto.js';
+
+@ApiTags('Cultivos')
+@Controller('crops')
 export class CultivosController {
-    constructor(
-        @Inject(CULTIVOS_SERVICE)
-        private readonly cultivosService: CultivosServiceInterface
-    ) {}
+  constructor(
+    private readonly cultivosService: CultivosService,
+  ) {}
 
-    @Post('')
-    @ApiOperation({ summary: 'Registrar un cultivo' })
-    @ApiBody({ type: CrearCultivoInDto })
-    @ApiResponse({ status: 201, description: 'Cultivo creado', type: CrearCultivoOutDto })
-    @ApiResponse({ status: 400, description: 'Datos invalidos, el mensaje indica cual campo y por que' })
-    @ApiResponse({ status: 404, description: 'La planta indicada no existe' })
-    crearCultivo(@Body() dto: CrearCultivoInDto) {
-        return this.cultivosService.crearCultivo(dto);
-    }
+  @Get()
+  @ApiOperation({ summary: 'Listar y filtrar cultivos' })
+  @ApiResponse({
+    status: 200,
+    description: 'Lista de cultivos.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Los filtros enviados son inválidos.',
+  })
+  listar(@Query() filtros: FiltrarCultivoDto) {
+    return this.cultivosService.listar(filtros);
+  }
 
-    @Get('')
-    @ApiOperation({ summary: 'Listar cultivos con filtros opcionales' })
-    @ApiQuery({ name: 'plantaId', required: false, description: 'Id de la planta' })
-    @ApiQuery({ name: 'region', required: false, description: 'Region exacta' })
-    @ApiQuery({ name: 'lote', required: false, description: 'Texto contenido en el lote' })
-    @ApiQuery({ name: 'desde', required: false, description: 'Fecha de siembra minima (AAAA-MM-DD)' })
-    @ApiQuery({ name: 'hasta', required: false, description: 'Fecha de siembra maxima (AAAA-MM-DD)' })
-    @ApiResponse({ status: 200, type: ObtenerCultivosOutDto })
-    @ApiResponse({ status: 400, description: 'Algun filtro tiene un valor invalido' })
-    obtenerCultivos(@Query('plantaId') plantaId?: string, @Query('region') region?: string, @Query('lote') lote?: string, @Query('desde') desde?: string, @Query('hasta') hasta?: string) {
-        return this.cultivosService.obtenerCultivos({ plantaId, region, lote, desde, hasta });
-    }
+  @Get(':id/mutations')
+  @ApiOperation({
+    summary: 'Calcular las mutaciones del ADN de un cultivo',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Cantidad y posiciones de las mutaciones encontradas.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Las secuencias de ADN son inválidas o tienen longitudes diferentes.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'El cultivo o su planta no existen.',
+  })
+  calcularMutaciones(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.cultivosService.calcularMutaciones(id);
+  }
 
-    @Get(':id')
-    @ApiOperation({ summary: 'Consultar un cultivo por id' })
-    @ApiParam({ name: 'id', description: 'Identificador de cultivo', example: 1 })
-    @ApiResponse({ status: 200, type: ObtenerCultivoOutDto })
-    @ApiResponse({ status: 400, description: 'El id no es un entero positivo' })
-    @ApiResponse({ status: 404, description: 'Cultivo no encontrado' })
-    obtenerCultivo(@Param('id') id: string) {
-        return this.cultivosService.obtenerCultivo(validarIdParametro(id, 'id'));
-    }
+  @Get(':id')
+  @ApiOperation({
+    summary: 'Consultar un cultivo por su identificador',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Datos del cultivo.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'El identificador es inválido.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'El cultivo no existe.',
+  })
+  obtenerPorId(
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.cultivosService.obtenerPorId(id);
+  }
 
-    @Get(':id/verificacion-mutaciones')
-    @ApiOperation({ summary: 'Contar mutaciones de la semilla del cultivo frente a la secuencia de referencia de su especie' })
-    @ApiParam({ name: 'id', description: 'Identificador de cultivo', example: 1 })
-    @ApiResponse({ status: 200, type: VerificarMutacionesOutDto })
-    @ApiResponse({ status: 404, description: 'Cultivo no encontrado' })
-    @ApiResponse({ status: 400, description: 'El id no es un entero positivo, o las secuencias tienen longitudes diferentes y no se pueden comparar' })
-    verificarMutaciones(@Param('id') id: string) {
-        return this.cultivosService.verificarMutaciones(validarIdParametro(id, 'id'));
-    }
+  @Post()
+  @ApiOperation({ summary: 'Registrar un cultivo' })
+  @ApiResponse({
+    status: 201,
+    description: 'Cultivo creado correctamente.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Los datos enviados son inválidos o la planta no existe.',
+  })
+  crear(@Body() dto: CrearCultivoDto) {
+    return this.cultivosService.crear(dto);
+  }
 
-    @Put(':id')
-    @ApiOperation({ summary: 'Actualizar un cultivo (se reemplazan todos los campos)' })
-    @ApiParam({ name: 'id', description: 'Identificador de cultivo', example: 1 })
-    @ApiBody({ type: ActualizarCultivoInDto })
-    @ApiResponse({ status: 200, description: 'Actualizacion realizada', type: Boolean })
-    @ApiResponse({ status: 400, description: 'Datos invalidos, el mensaje indica cual campo y por que' })
-    @ApiResponse({ status: 404, description: 'Cultivo no encontrado, o la planta indicada no existe' })
-    actualizarCultivo(@Param('id') id: string, @Body() dto: ActualizarCultivoInDto) {
-        return this.cultivosService.actualizarCultivo(validarIdParametro(id, 'id'), dto);
-    }
+  @Patch(':id')
+  @ApiOperation({ summary: 'Actualizar un cultivo' })
+  @ApiResponse({
+    status: 200,
+    description: 'Cultivo actualizado correctamente.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Los datos enviados son inválidos.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'El cultivo no existe.',
+  })
+  actualizar(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: ActualizarCultivoDto,
+  ) {
+    return this.cultivosService.actualizar(id, dto);
+  }
 
-    @Delete(':id')
-    @ApiOperation({ summary: 'Eliminar un cultivo' })
-    @ApiParam({ name: 'id', description: 'Identificador de cultivo', example: 1 })
-    @ApiResponse({ status: 200, description: 'Eliminacion realizada', type: Boolean })
-    @ApiResponse({ status: 400, description: 'El id no es un entero positivo' })
-    @ApiResponse({ status: 404, description: 'Cultivo no encontrado' })
-    eliminarCultivo(@Param('id') id: string) {
-        return this.cultivosService.eliminarCultivo(validarIdParametro(id, 'id'));
-    }
+  @Delete(':id')
+  @ApiOperation({ summary: 'Eliminar un cultivo' })
+  @ApiResponse({
+    status: 200,
+    description: 'Cultivo eliminado correctamente.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'El identificador es inválido.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'El cultivo no existe.',
+  })
+  eliminar(@Param('id', ParseIntPipe) id: number) {
+    return this.cultivosService.eliminar(id);
+  }
 }

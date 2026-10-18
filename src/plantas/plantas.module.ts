@@ -1,19 +1,14 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PlantasService } from './plantas.service.js';
-import { PLANTAS_SERVICE } from './tokens.js';
-import { PlantasController } from './plantas.controller.js';
+
 import { Planta } from './planta.entity.js';
-import { Cultivo } from '../cultivos/cultivo.entity.js';
+import { PlantasController } from './plantas.controller.js';
+import { PlantasService } from './plantas.service.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Planta, Cultivo])],
-  providers: [
-    {
-      provide: PLANTAS_SERVICE,
-      useClass: PlantasService
-    },
-  ],
+  imports: [TypeOrmModule.forFeature([Planta])],
   controllers: [PlantasController],
+  providers: [PlantasService],
+  exports: [PlantasService],
 })
 export class PlantasModule {}

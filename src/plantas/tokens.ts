@@ -1,1 +1,0 @@
-export const PLANTAS_SERVICE = Symbol('PLANTAS_SERVICE');
