@@ -12,11 +12,11 @@
 } from '@nestjs/common';
 import { BrotesService } from './brotes.service.js';
 
-@Controller('outbreaks')
+@Controller('brotes')
 export class BrotesController {
   constructor(private readonly brotesService: BrotesService) {}
 
-  @Get('summary')
+  @Get('resumen')
   obtenerResumen() {
     return this.brotesService.obtenerResumen();
   }
