@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { DataSource } from 'typeorm';
 
+import { PatogenosService } from '../patogenos/patogenos.service.js';
 import { CrearEnfermedadDto } from './dto/crear-enfermedad.dto.js';
 import { ActualizarEnfermedadDto } from './dto/actualizar-enfermedad.dto.js';
 
@@ -18,7 +19,10 @@ const EPOCAS_VALIDAS = [
 
 @Injectable()
 export class EnfermedadesService {
-  constructor(private readonly dataSource: DataSource) {}
+  constructor(
+    private readonly dataSource: DataSource,
+    private readonly patogenosService: PatogenosService,
+  ) {}
 
   private validarId(id: number): void {
     if (!Number.isInteger(id) || id <= 0) {
@@ -86,6 +90,24 @@ export class EnfermedadesService {
     return enfermedades[0];
   }
 
+  async obtenerDetalle(id: number) {
+    const enfermedad = await this.obtenerPorId(id);
+
+    const patogeno = await this.patogenosService.obtenerPorId(
+      Number(enfermedad.patogenoId),
+    );
+
+    const tratamientos = await this.dataSource.query(
+      `SELECT id, nombre, descripcionAplicacion, tipo, enfermedadId
+       FROM tratamientos
+       WHERE enfermedadId = ?
+       ORDER BY id`,
+      [id],
+    );
+
+    return { enfermedad, patogeno, tratamientos };
+  }
+
   async crear(dto: CrearEnfermedadDto) {
     this.validarTexto(dto.nombre, 'nombre');
     this.validarTexto(dto.descripcionSintomas, 'descripcionSintomas');
@@ -105,15 +127,7 @@ export class EnfermedadesService {
       ],
     );
 
-          const id = Number(resultado.insertId);
-
-    if (!Number.isInteger(id) || id <= 0) {
-      throw new BadRequestException(
-        'No fue posible obtener el identificador de la enfermedad creada.',
-      );
-    }
-
-    return this.obtenerPorId(id);
+    const id = Number(resultado.insertId);
 
     if (!Number.isInteger(id) || id <= 0) {
       throw new BadRequestException(

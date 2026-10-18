@@ -53,6 +53,28 @@ export class EnfermedadesController {
     return this.enfermedadesService.obtenerPorId(id);
   }
 
+  @Get(':id/detalle')
+  @ApiOperation({
+    summary:
+      'Consultar el detalle de una enfermedad con su patógeno y sus tratamientos',
+  })
+  @ApiResponse({
+    status: 200,
+    description:
+      'Enfermedad junto con su patógeno asociado y la lista de tratamientos.',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'El identificador es inválido.',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'La enfermedad no existe.',
+  })
+  obtenerDetalle(@Param('id', ParseIntPipe) id: number) {
+    return this.enfermedadesService.obtenerDetalle(id);
+  }
+
   @Post()
   @ApiOperation({ summary: 'Registrar una enfermedad' })
   @ApiResponse({
