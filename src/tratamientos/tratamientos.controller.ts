@@ -1,4 +1,3 @@
-
 import {
   Body,
   Controller,
@@ -20,7 +19,7 @@ import { CrearTratamientoDto } from './dto/crear-tratamiento.dto.js';
 import { ActualizarTratamientoDto } from './dto/actualizar-tratamiento.dto.js';
 
 @ApiTags('Tratamientos')
-@Controller('treatments')
+@Controller('tratamientos')
 export class TratamientosController {
   constructor(
     private readonly tratamientosService: TratamientosService,
