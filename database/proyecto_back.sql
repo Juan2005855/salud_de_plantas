@@ -1,3 +1,7 @@
+-- Esquema de la base de datos de la API de Sanidad Vegetal (Breaze in the Moon)
+-- Las relaciones se guardan solo como columnas con el id (sin llaves foraneas),
+-- y la API verifica que los registros referenciados existan.
+
 CREATE DATABASE IF NOT EXISTS proyecto_back
     CHARACTER SET utf8mb4
     COLLATE utf8mb4_unicode_ci;
@@ -10,7 +14,7 @@ CREATE TABLE IF NOT EXISTS plantas (
     nombreCientifico VARCHAR(150) NOT NULL,
     familiaBotanica VARCHAR(100) NOT NULL,
     tipoCultivo ENUM('hortaliza', 'frutal', 'cereal', 'ornamental', 'otro') NOT NULL,
-    secuenciaGenetica TEXT NOT NULL,
+    secuenciaGenetica LONGTEXT NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY UQ_plantas_nombre_cientifico (nombreCientifico)
 ) ENGINE=InnoDB;
@@ -21,7 +25,7 @@ CREATE TABLE IF NOT EXISTS patogenos (
     nombreCientifico VARCHAR(150) NOT NULL,
     tipo ENUM('virus', 'hongo', 'oomiceto', 'bacteria', 'insecto', 'nematodo') NOT NULL,
     transmision VARCHAR(100) NOT NULL,
-    secuenciaGenetica TEXT NOT NULL,
+    secuenciaGenetica LONGTEXT NOT NULL,
     PRIMARY KEY (id),
     UNIQUE KEY UQ_patogenos_nombre_cientifico (nombreCientifico)
 ) ENGINE=InnoDB;
@@ -62,7 +66,7 @@ CREATE TABLE IF NOT EXISTS cultivos (
     lote VARCHAR(100) NOT NULL,
     region VARCHAR(100) NOT NULL,
     fechaSiembra DATE NOT NULL,
-    codigoGeneticoSemilla TEXT NOT NULL,
+    codigoGeneticoSemilla LONGTEXT NOT NULL,
     PRIMARY KEY (id),
     KEY IDX_cultivos_plantaId (plantaId)
 ) ENGINE=InnoDB;
