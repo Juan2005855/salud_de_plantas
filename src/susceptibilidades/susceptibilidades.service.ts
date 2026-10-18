@@ -1,4 +1,3 @@
-
 import {
   BadRequestException,
   ConflictException,
@@ -8,22 +7,22 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 
-import { Susceptibility } from './susceptibilidad.entity.js';
+import { Susceptibilidad } from './susceptibilidad.entity.js';
 import { CrearSusceptibilidadDto } from './dto/crear-susceptibilidad.dto.js';
 import { ActualizarSusceptibilidadDto } from './dto/actualizar-susceptibilidad.dto.js';
 
 @Injectable()
 export class SusceptibilidadesService {
   constructor(
-    @InjectRepository(Susceptibility)
-    private readonly repositorio: Repository<Susceptibility>,
+    @InjectRepository(Susceptibilidad)
+    private readonly repositorio: Repository<Susceptibilidad>,
     private readonly dataSource: DataSource,
   ) {}
 
-  private validarNivel(level: string): void {
+  private validarNivel(nivel: string): void {
     const nivelesPermitidos = ['baja', 'media', 'alta'];
 
-    if (!nivelesPermitidos.includes(level)) {
+    if (!nivelesPermitidos.includes(nivel)) {
       throw new BadRequestException(
         'El nivel debe ser baja, media o alta.',
       );
@@ -39,50 +38,50 @@ export class SusceptibilidadesService {
   }
 
   private async validarReferencias(
-    plantId: number,
-    diseaseId: number,
+    plantaId: number,
+    enfermedadId: number,
   ): Promise<void> {
     const plantas: Array<{ id: number }> =
       await this.dataSource.query(
         'SELECT id FROM plantas WHERE id = ?',
-        [plantId],
+        [plantaId],
       );
 
     if (plantas.length === 0) {
       throw new BadRequestException(
-        `No existe una planta con ID ${plantId}.`,
+        `No existe una planta con ID ${plantaId}.`,
       );
     }
 
     const enfermedades: Array<{ id: number }> =
       await this.dataSource.query(
         'SELECT id FROM enfermedades WHERE id = ?',
-        [diseaseId],
+        [enfermedadId],
       );
 
     if (enfermedades.length === 0) {
       throw new BadRequestException(
-        `No existe una enfermedad con ID ${diseaseId}.`,
+        `No existe una enfermedad con ID ${enfermedadId}.`,
       );
     }
   }
 
   async crear(
     datos: CrearSusceptibilidadDto,
-  ): Promise<Susceptibility> {
-    this.validarId(datos.plantId, 'plantId');
-    this.validarId(datos.diseaseId, 'diseaseId');
-    this.validarNivel(datos.level);
+  ): Promise<Susceptibilidad> {
+    this.validarId(datos.plantaId, 'plantaId');
+    this.validarId(datos.enfermedadId, 'enfermedadId');
+    this.validarNivel(datos.nivel);
 
     await this.validarReferencias(
-      datos.plantId,
-      datos.diseaseId,
+      datos.plantaId,
+      datos.enfermedadId,
     );
 
     const existente = await this.repositorio.findOne({
       where: {
-        plantId: datos.plantId,
-        diseaseId: datos.diseaseId,
+        plantaId: datos.plantaId,
+        enfermedadId: datos.enfermedadId,
       },
     });
 
@@ -107,11 +106,11 @@ export class SusceptibilidadesService {
     }
   }
 
-  async consultarTodos(): Promise<Susceptibility[]> {
+  async consultarTodos(): Promise<Susceptibilidad[]> {
     return this.repositorio.find();
   }
 
-  async consultarPorId(id: number): Promise<Susceptibility> {
+  async consultarPorId(id: number): Promise<Susceptibilidad> {
     this.validarId(id, 'id');
 
     const susceptibilidad = await this.repositorio.findOne({
@@ -130,21 +129,21 @@ export class SusceptibilidadesService {
   async actualizar(
     id: number,
     datos: ActualizarSusceptibilidadDto,
-  ): Promise<Susceptibility> {
+  ): Promise<Susceptibilidad> {
     const actual = await this.consultarPorId(id);
 
-    const plantId = datos.plantId ?? actual.plantId;
-    const diseaseId = datos.diseaseId ?? actual.diseaseId;
-    const level = datos.level ?? actual.level;
+    const plantaId = datos.plantaId ?? actual.plantaId;
+    const enfermedadId = datos.enfermedadId ?? actual.enfermedadId;
+    const nivel = datos.nivel ?? actual.nivel;
 
-    this.validarId(plantId, 'plantId');
-    this.validarId(diseaseId, 'diseaseId');
-    this.validarNivel(level);
+    this.validarId(plantaId, 'plantaId');
+    this.validarId(enfermedadId, 'enfermedadId');
+    this.validarNivel(nivel);
 
-    await this.validarReferencias(plantId, diseaseId);
+    await this.validarReferencias(plantaId, enfermedadId);
 
     const duplicada = await this.repositorio.findOne({
-      where: { plantId, diseaseId },
+      where: { plantaId, enfermedadId },
     });
 
     if (duplicada && duplicada.id !== id) {
@@ -153,9 +152,9 @@ export class SusceptibilidadesService {
       );
     }
 
-    actual.plantId = plantId;
-    actual.diseaseId = diseaseId;
-    actual.level = level;
+    actual.plantaId = plantaId;
+    actual.enfermedadId = enfermedadId;
+    actual.nivel = nivel;
 
     try {
       return await this.repositorio.save(actual);
