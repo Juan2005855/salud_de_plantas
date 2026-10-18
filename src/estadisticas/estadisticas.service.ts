@@ -95,4 +95,68 @@ export class EstadisticasService {
 
     return resultado;
   }
+
+  async porPatogeno() {
+    const brotes = await this.dataSource.query(`
+      SELECT enfermedadId, COUNT(*) AS totalBrotes,
+             COALESCE(SUM(hectareasAfectadas), 0) AS hectareasAfectadas
+      FROM brotes
+      GROUP BY enfermedadId
+    `);
+
+    const enfermedades = await this.dataSource.query(
+      'SELECT id, patogenoId FROM enfermedades',
+    );
+
+    const patogenos = await this.dataSource.query(
+      'SELECT id, nombre, nombreCientifico, tipo FROM patogenos',
+    );
+
+    const patogenoPorEnfermedad = new Map<number, number>();
+
+    for (const enfermedad of enfermedades) {
+      patogenoPorEnfermedad.set(
+        Number(enfermedad.id),
+        Number(enfermedad.patogenoId),
+      );
+    }
+
+    const acumulado = new Map<
+      number,
+      { totalBrotes: number; hectareasAfectadas: number }
+    >();
+
+    for (const fila of brotes) {
+      const patogenoId = patogenoPorEnfermedad.get(Number(fila.enfermedadId));
+
+      if (patogenoId === undefined) {
+        continue;
+      }
+
+      const actual = acumulado.get(patogenoId) ?? {
+        totalBrotes: 0,
+        hectareasAfectadas: 0,
+      };
+
+      actual.totalBrotes += Number(fila.totalBrotes);
+      actual.hectareasAfectadas += Number(fila.hectareasAfectadas);
+      acumulado.set(patogenoId, actual);
+    }
+
+    return patogenos
+      .filter((patogeno: any) => acumulado.has(Number(patogeno.id)))
+      .map((patogeno: any) => {
+        const datos = acumulado.get(Number(patogeno.id))!;
+
+        return {
+          patogenoId: Number(patogeno.id),
+          patogeno: patogeno.nombre,
+          nombreCientifico: patogeno.nombreCientifico,
+          tipo: patogeno.tipo,
+          totalBrotes: datos.totalBrotes,
+          hectareasAfectadas: Number(datos.hectareasAfectadas.toFixed(2)),
+        };
+      })
+      .sort((a: any, b: any) => b.totalBrotes - a.totalBrotes);
+  }
 }
