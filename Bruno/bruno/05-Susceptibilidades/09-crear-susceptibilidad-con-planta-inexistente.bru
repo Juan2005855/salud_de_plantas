@@ -1,0 +1,30 @@
+meta {
+  name: Crear susceptibilidad con planta inexistente
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/susceptibilidades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 99999,
+    "enfermedadId": 1,
+    "nivel": "media"
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("planta")).to.equal(true);
+  });
+}

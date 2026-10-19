@@ -1,0 +1,30 @@
+meta {
+  name: Crear susceptibilidad repetida para la misma planta y enfermedad
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/susceptibilidades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 9,
+    "enfermedadId": 1,
+    "nivel": "alta"
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("ya existe")).to.equal(true);
+  });
+}

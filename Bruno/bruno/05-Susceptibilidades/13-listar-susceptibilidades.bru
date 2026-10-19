@@ -1,0 +1,22 @@
+meta {
+  name: Listar susceptibilidades
+  type: http
+  seq: 13
+}
+
+get {
+  url: {{baseUrl}}/susceptibilidades
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("lista las susceptibilidades de ejemplo", function () {
+    expect(res.body).to.be.an("array");
+    expect(res.body.length).to.be.at.least(15);
+  });
+}

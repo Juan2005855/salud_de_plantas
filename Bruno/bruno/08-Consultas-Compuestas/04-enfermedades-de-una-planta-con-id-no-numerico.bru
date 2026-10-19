@@ -1,0 +1,15 @@
+meta {
+  name: Enfermedades de una planta con id no numerico
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/plantas/abc/enfermedades
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Modificar enfermedad inexistente
+  type: http
+  seq: 23
+}
+
+patch {
+  url: {{baseUrl}}/enfermedades/99999
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "X"
+  }
+}
+
+assert {
+  res.status: eq 404
+}

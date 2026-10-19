@@ -1,0 +1,25 @@
+meta {
+  name: Crear brote con fecha numerica
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": 20261001,
+    "region": "Boyaca",
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: eq 400
+}

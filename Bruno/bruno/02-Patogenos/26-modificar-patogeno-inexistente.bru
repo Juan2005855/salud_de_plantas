@@ -1,0 +1,21 @@
+meta {
+  name: Modificar patogeno inexistente
+  type: http
+  seq: 26
+}
+
+patch {
+  url: {{baseUrl}}/patogenos/99999
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "X"
+  }
+}
+
+assert {
+  res.status: eq 404
+}

@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar tratamiento inexistente
+  type: http
+  seq: 24
+}
+
+delete {
+  url: {{baseUrl}}/tratamientos/99999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

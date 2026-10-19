@@ -1,0 +1,21 @@
+meta {
+  name: Verificar mutaciones con 3 mutaciones
+  type: http
+  seq: 34
+}
+
+get {
+  url: {{baseUrl}}/cultivos/{{cultivoMutadoId}}/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("hay 3 mutaciones", function () {
+    expect(res.body.totalMutaciones).to.equal(3);
+  });
+}

@@ -1,0 +1,24 @@
+meta {
+  name: Crear planta sin tipo de cultivo
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus tipo2 {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

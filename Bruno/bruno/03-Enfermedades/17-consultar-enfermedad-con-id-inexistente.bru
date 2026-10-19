@@ -1,0 +1,15 @@
+meta {
+  name: Consultar enfermedad con id inexistente
+  type: http
+  seq: 17
+}
+
+get {
+  url: {{baseUrl}}/enfermedades/99999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

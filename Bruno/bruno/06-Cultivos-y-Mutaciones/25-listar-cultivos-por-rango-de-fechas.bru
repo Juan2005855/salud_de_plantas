@@ -1,0 +1,21 @@
+meta {
+  name: Listar cultivos por rango de fechas
+  type: http
+  seq: 25
+}
+
+get {
+  url: {{baseUrl}}/cultivos?plantaId={{plantaRefId}}&desde=2026-01-01&hasta=2026-12-31
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("devuelve los 4 cultivos", function () {
+    expect(res.body.cultivos.length).to.equal(4);
+  });
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Modificar patogeno con secuencia invalida
+  type: http
+  seq: 24
+}
+
+patch {
+  url: {{baseUrl}}/patogenos/{{patogenoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "secuenciaGenetica": "zz"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

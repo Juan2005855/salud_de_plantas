@@ -1,0 +1,30 @@
+meta {
+  name: Crear segunda planta valida
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus bruno segunda {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "cereal",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("plantaId2", res.body.id);
+  bru.setVar("nombreCientificoPlanta2", res.body.nombreCientifico);
+}

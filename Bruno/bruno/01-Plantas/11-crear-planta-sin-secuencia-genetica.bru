@@ -1,0 +1,24 @@
+meta {
+  name: Crear planta sin secuencia genetica
+  type: http
+  seq: 11
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreComun": "Planta de prueba",
+    "nombreCientifico": "Plantus s1 {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

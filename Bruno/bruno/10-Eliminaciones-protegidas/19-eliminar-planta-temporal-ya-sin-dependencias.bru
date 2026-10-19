@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar planta temporal ya sin dependencias
+  type: http
+  seq: 19
+}
+
+delete {
+  url: {{baseUrl}}/plantas/{{plantaTmpId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

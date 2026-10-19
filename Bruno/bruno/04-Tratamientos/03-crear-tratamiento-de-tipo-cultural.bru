@@ -1,0 +1,28 @@
+meta {
+  name: Crear tratamiento de tipo cultural
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Tratamiento cultural de prueba",
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "cultural",
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 201
+}
+
+script:post-response {
+  bru.setVar("tratamiento_cultural_Id", res.body.id);
+}

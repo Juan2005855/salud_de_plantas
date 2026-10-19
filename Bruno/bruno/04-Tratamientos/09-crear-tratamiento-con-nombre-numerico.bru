@@ -1,0 +1,24 @@
+meta {
+  name: Crear tratamiento con nombre numerico
+  type: http
+  seq: 9
+}
+
+post {
+  url: {{baseUrl}}/tratamientos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": 9,
+    "descripcionAplicacion": "Aplicar cada semana",
+    "tipo": "biologico",
+    "enfermedadId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

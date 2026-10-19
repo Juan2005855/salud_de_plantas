@@ -1,0 +1,32 @@
+meta {
+  name: Crear patogeno con nombre cientifico duplicado
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Patogeno de prueba",
+    "nombreCientifico": "Phytophthora infestans",
+    "tipo": "hongo",
+    "transmision": "viento",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 409
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("nombre cient")).to.equal(true);
+  });
+}

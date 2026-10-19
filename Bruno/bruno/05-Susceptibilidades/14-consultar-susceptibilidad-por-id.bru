@@ -1,0 +1,15 @@
+meta {
+  name: Consultar susceptibilidad por id
+  type: http
+  seq: 14
+}
+
+get {
+  url: {{baseUrl}}/susceptibilidades/{{susceptibilidadNuevaId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

@@ -1,0 +1,26 @@
+meta {
+  name: Brotes por planta (cultivo)
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/estadisticas/brotes/por-planta
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("ordenado de mas a menos brotes", function () {
+    expect(res.body).to.be.an("array");
+    for (let i = 1; i < res.body.length; i++) { expect(res.body[i-1].totalBrotes).to.be.at.least(res.body[i].totalBrotes); }
+  });
+  test("el tomate tiene al menos 8 brotes", function () {
+    const f = res.body.find(function (x) { return x.plantaId === 2; });
+    expect(f.totalBrotes).to.be.at.least(8);
+  });
+}

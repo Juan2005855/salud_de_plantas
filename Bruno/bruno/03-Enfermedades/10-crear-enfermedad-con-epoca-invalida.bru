@@ -1,0 +1,31 @@
+meta {
+  name: Crear enfermedad con epoca invalida
+  type: http
+  seq: 10
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "Enfermedad de prueba {{sufijoE}}",
+    "descripcionSintomas": "Manchas en las hojas",
+    "epocaRiesgo": "siempre",
+    "patogenoId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("poca")).to.equal(true);
+  });
+}

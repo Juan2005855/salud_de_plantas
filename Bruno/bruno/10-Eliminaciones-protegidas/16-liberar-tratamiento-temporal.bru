@@ -1,0 +1,15 @@
+meta {
+  name: Liberar tratamiento temporal
+  type: http
+  seq: 16
+}
+
+delete {
+  url: {{baseUrl}}/tratamientos/{{tratamientoTmpId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

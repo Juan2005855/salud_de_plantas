@@ -1,0 +1,15 @@
+meta {
+  name: Consultar patogeno con id no numerico
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/patogenos/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

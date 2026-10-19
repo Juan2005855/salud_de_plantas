@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar tratamiento con id no numerico
+  type: http
+  seq: 23
+}
+
+delete {
+  url: {{baseUrl}}/tratamientos/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

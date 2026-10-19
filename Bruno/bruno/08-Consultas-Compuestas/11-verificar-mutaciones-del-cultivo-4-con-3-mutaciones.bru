@@ -1,0 +1,22 @@
+meta {
+  name: Verificar mutaciones del cultivo 4 con 3 mutaciones
+  type: http
+  seq: 11
+}
+
+get {
+  url: {{baseUrl}}/cultivos/4/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("cuenta 3 mutaciones", function () {
+    expect(res.body.totalMutaciones).to.equal(3);
+    expect(res.body.posicionesMutadas).to.eql([15, 23, 30]);
+  });
+}

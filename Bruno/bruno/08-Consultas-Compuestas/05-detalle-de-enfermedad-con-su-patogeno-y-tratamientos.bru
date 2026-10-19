@@ -1,0 +1,27 @@
+meta {
+  name: Detalle de enfermedad con su patogeno y tratamientos
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/enfermedades/1/detalle
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("trae enfermedad, patogeno y tratamientos", function () {
+    expect(res.body.enfermedad.id).to.equal(1);
+    expect(res.body.patogeno.id).to.equal(1);
+    expect(res.body.tratamientos.length).to.equal(2);
+  });
+}
+
+docs {
+  Consulta compuesta: une enfermedades, patogenos y tratamientos.
+}

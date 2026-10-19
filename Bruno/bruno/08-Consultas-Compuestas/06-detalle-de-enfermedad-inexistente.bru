@@ -1,0 +1,15 @@
+meta {
+  name: Detalle de enfermedad inexistente
+  type: http
+  seq: 6
+}
+
+get {
+  url: {{baseUrl}}/enfermedades/99999/detalle
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

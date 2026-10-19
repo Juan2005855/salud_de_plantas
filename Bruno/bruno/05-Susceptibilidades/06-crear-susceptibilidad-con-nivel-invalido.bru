@@ -1,0 +1,30 @@
+meta {
+  name: Crear susceptibilidad con nivel invalido
+  type: http
+  seq: 6
+}
+
+post {
+  url: {{baseUrl}}/susceptibilidades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 9,
+    "enfermedadId": 2,
+    "nivel": "critica"
+  }
+}
+
+assert {
+  res.status: eq 400
+}
+
+tests {
+  test("el mensaje explica el error", function () {
+    const m = JSON.stringify(res.body.message).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+    expect(m.includes("nivel")).to.equal(true);
+  });
+}

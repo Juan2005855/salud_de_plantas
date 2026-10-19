@@ -1,0 +1,21 @@
+meta {
+  name: Modificar tratamiento con enfermedad inexistente
+  type: http
+  seq: 21
+}
+
+patch {
+  url: {{baseUrl}}/tratamientos/{{tratamientoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "enfermedadId": 99999
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}

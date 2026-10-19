@@ -1,0 +1,25 @@
+meta {
+  name: Crear brote con fecha en formato invalido
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": "01/10/2026",
+    "region": "Boyaca",
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: eq 400
+}

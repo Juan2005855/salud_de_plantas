@@ -1,0 +1,21 @@
+meta {
+  name: Modificar brote con fecha futura
+  type: http
+  seq: 38
+}
+
+patch {
+  url: {{baseUrl}}/brotes/{{broteNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "fecha": "2099-12-31"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

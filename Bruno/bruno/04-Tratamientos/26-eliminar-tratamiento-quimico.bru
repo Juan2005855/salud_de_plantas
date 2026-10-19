@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar tratamiento quimico
+  type: http
+  seq: 26
+}
+
+delete {
+  url: {{baseUrl}}/tratamientos/{{tratamiento_quimico_Id}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

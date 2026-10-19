@@ -1,0 +1,25 @@
+meta {
+  name: Crear patogeno con nombre vacio
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/patogenos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": "   ",
+    "nombreCientifico": "Pathogenus vacio {{sufijoP}}",
+    "tipo": "hongo",
+    "transmision": "viento",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

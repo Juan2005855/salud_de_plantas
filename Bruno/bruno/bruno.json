@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "Breaze-in-the-Moon",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Listar cultivos por planta
+  type: http
+  seq: 23
+}
+
+get {
+  url: {{baseUrl}}/cultivos?plantaId={{plantaRefId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("devuelve los 4 cultivos de la planta", function () {
+    expect(res.body.cultivos.length).to.equal(4);
+  });
+}

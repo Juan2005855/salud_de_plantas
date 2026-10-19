@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar enfermedad anual sin dependencias
+  type: http
+  seq: 27
+}
+
+delete {
+  url: {{baseUrl}}/enfermedades/{{enfermedadAnualId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}

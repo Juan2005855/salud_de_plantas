@@ -1,0 +1,15 @@
+meta {
+  name: Verificar mutaciones de un cultivo inexistente
+  type: http
+  seq: 19
+}
+
+get {
+  url: {{baseUrl}}/cultivos/99999/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}

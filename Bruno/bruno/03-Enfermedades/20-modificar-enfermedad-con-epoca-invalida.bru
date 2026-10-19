@@ -1,0 +1,21 @@
+meta {
+  name: Modificar enfermedad con epoca invalida
+  type: http
+  seq: 20
+}
+
+patch {
+  url: {{baseUrl}}/enfermedades/{{enfermedadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "epocaRiesgo": "nunca"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

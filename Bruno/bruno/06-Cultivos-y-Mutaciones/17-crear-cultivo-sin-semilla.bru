@@ -1,0 +1,24 @@
+meta {
+  name: Crear cultivo sin semilla
+  type: http
+  seq: 17
+}
+
+post {
+  url: {{baseUrl}}/cultivos
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": {{plantaRefId}},
+    "lote": "Lote de prueba",
+    "region": "Boyaca",
+    "fechaSiembra": "2026-03-15"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

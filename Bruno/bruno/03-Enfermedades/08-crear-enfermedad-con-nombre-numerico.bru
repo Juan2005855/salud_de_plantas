@@ -1,0 +1,24 @@
+meta {
+  name: Crear enfermedad con nombre numerico
+  type: http
+  seq: 8
+}
+
+post {
+  url: {{baseUrl}}/enfermedades
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombre": 55,
+    "descripcionSintomas": "Manchas en las hojas",
+    "epocaRiesgo": "verano",
+    "patogenoId": 1
+  }
+}
+
+assert {
+  res.status: eq 400
+}

@@ -1,0 +1,22 @@
+meta {
+  name: Listar plantas
+  type: http
+  seq: 16
+}
+
+get {
+  url: {{baseUrl}}/plantas
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("devuelve la lista de plantas", function () {
+    expect(res.body.plantas).to.be.an("array");
+    expect(res.body.plantas.length).to.be.greaterThan(0);
+  });
+}

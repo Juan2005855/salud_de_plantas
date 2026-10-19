@@ -1,0 +1,21 @@
+meta {
+  name: Modificar patogeno con nombre cientifico de otro
+  type: http
+  seq: 22
+}
+
+patch {
+  url: {{baseUrl}}/patogenos/{{patogenoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreCientifico": "Fusarium oxysporum"
+  }
+}
+
+assert {
+  res.status: eq 409
+}

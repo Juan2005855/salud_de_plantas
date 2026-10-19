@@ -1,0 +1,24 @@
+meta {
+  name: Crear planta sin nombre comun
+  type: http
+  seq: 4
+}
+
+post {
+  url: {{baseUrl}}/plantas
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "nombreCientifico": "Plantus bruno {{sufijo}}",
+    "familiaBotanica": "Pruebaceae",
+    "tipoCultivo": "hortaliza",
+    "secuenciaGenetica": "ATGCGTACGTTAGC"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

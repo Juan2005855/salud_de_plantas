@@ -1,0 +1,21 @@
+meta {
+  name: Modificar enfermedad con patogeno inexistente
+  type: http
+  seq: 22
+}
+
+patch {
+  url: {{baseUrl}}/enfermedades/{{enfermedadNuevaId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "patogenoId": 99999
+  }
+}
+
+assert {
+  res.status: in [400, 404]
+}

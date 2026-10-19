@@ -1,0 +1,21 @@
+meta {
+  name: Modificar tratamiento con tipo invalido
+  type: http
+  seq: 20
+}
+
+patch {
+  url: {{baseUrl}}/tratamientos/{{tratamientoNuevoId}}
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "tipo": "magico"
+  }
+}
+
+assert {
+  res.status: eq 400
+}

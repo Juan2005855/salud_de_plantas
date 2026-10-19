@@ -1,0 +1,21 @@
+meta {
+  name: Verificar mutaciones sin diferencias
+  type: http
+  seq: 33
+}
+
+get {
+  url: {{baseUrl}}/cultivos/{{cultivoIgualId}}/verificacion-mutaciones
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("hay 0 mutaciones", function () {
+    expect(res.body.totalMutaciones).to.equal(0);
+  });
+}

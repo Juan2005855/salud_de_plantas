@@ -1,0 +1,21 @@
+meta {
+  name: Consultar planta con id inexistente
+  type: http
+  seq: 21
+}
+
+get {
+  url: {{baseUrl}}/plantas/999999
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 404
+}
+
+tests {
+  test("el mensaje menciona planta", function () {
+    expect(JSON.stringify(res.body.message).toLowerCase()).to.include("planta");
+  });
+}

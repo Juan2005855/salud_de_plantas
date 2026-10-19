@@ -1,0 +1,15 @@
+meta {
+  name: Eliminar enfermedad con id no numerico
+  type: http
+  seq: 24
+}
+
+delete {
+  url: {{baseUrl}}/enfermedades/abc
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 400
+}

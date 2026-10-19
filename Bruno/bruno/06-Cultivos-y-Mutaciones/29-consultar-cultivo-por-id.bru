@@ -1,0 +1,21 @@
+meta {
+  name: Consultar cultivo por id
+  type: http
+  seq: 29
+}
+
+get {
+  url: {{baseUrl}}/cultivos/{{cultivoId}}
+  body: none
+  auth: none
+}
+
+assert {
+  res.status: eq 200
+}
+
+tests {
+  test("es el cultivo creado", function () {
+    expect(res.body.id).to.equal(bru.getVar("cultivoId"));
+  });
+}

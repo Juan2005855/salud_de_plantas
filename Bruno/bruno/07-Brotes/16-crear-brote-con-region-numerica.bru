@@ -1,0 +1,25 @@
+meta {
+  name: Crear brote con region numerica
+  type: http
+  seq: 16
+}
+
+post {
+  url: {{baseUrl}}/brotes
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "plantaId": 1,
+    "enfermedadId": 1,
+    "fecha": "2026-10-01",
+    "region": 12,
+    "hectareasAfectadas": 5.5
+  }
+}
+
+assert {
+  res.status: eq 400
+}
