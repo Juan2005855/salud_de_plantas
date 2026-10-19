@@ -5,9 +5,14 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/cultivos?plantaId={{plantaRefId}}&region=Boyaca
+  url: http://localhost:3000/cultivos?plantaId={{plantaRefId}}&region=Boyaca
   body: none
   auth: none
+}
+
+params:query {
+  plantaId: {{plantaRefId}}
+  region: Boyaca
 }
 
 assert {

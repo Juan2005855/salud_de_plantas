@@ -60,7 +60,7 @@ export class PlantasController {
         return this.plantasService.actualizarPlanta(validarIdParametro(id, 'id'), dto);
     }
 
-    @Delete(':id')
+    @Delete('')
     @ApiOperation({ summary: 'Eliminar una planta' })
     @ApiParam({ name: 'id', description: 'Identificador de planta', example: 1 })
     @ApiResponse({ status: 200, description: 'Eliminacion realizada', type: Boolean })

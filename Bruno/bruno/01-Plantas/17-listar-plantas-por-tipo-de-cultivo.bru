@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/plantas?tipoCultivo=cereal
+  url: http://localhost:3000/plantas?tipoCultivo=cereal
   body: none
   auth: none
+}
+
+params:query {
+  tipoCultivo: cereal
 }
 
 assert {
