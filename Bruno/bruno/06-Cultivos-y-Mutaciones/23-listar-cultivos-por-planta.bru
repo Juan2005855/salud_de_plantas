@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/cultivos?plantaId={{plantaRefId}}
+  url: http://localhost:3000/cultivos?plantaId={{plantaRefId}}
   body: none
   auth: none
+}
+
+params:query {
+  plantaId: {{plantaRefId}}
 }
 
 assert {

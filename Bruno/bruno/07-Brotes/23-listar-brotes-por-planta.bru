@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/brotes?plantaId=4
+  url: http://localhost:3000/brotes?plantaId=4
   body: none
   auth: none
+}
+
+params:query {
+  plantaId: 4
 }
 
 assert {

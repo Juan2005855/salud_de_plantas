@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/plantas?nombreComun=Planta de prueba
+  url: http://localhost:3000/plantas?nombreComun=Planta de prueba
   body: none
   auth: none
+}
+
+params:query {
+  nombreComun: Planta de prueba
 }
 
 assert {

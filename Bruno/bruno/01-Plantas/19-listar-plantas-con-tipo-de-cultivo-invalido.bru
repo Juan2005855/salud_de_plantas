@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/plantas?tipoCultivo=arbol
+  url: http://localhost:3000/plantas?tipoCultivo=arbol
   body: none
   auth: none
+}
+
+params:query {
+  tipoCultivo: arbol
 }
 
 assert {

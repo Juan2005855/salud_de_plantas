@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{baseUrl}}/brotes?region=Caldas
+  url: http://localhost:3000/brotes?region=Caldas
   body: none
   auth: none
+}
+
+params:query {
+  region: Caldas
 }
 
 assert {

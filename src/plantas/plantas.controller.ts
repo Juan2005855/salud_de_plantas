@@ -69,5 +69,7 @@ export class PlantasController {
     @ApiResponse({ status: 409, description: 'La planta tiene susceptibilidades, cultivos o brotes asociados y no se puede eliminar' })
     eliminarPlanta(@Param('id') id: string) {
         return this.plantasService.eliminarPlanta(validarIdParametro(id, 'id'));
+        
+
     }
 }
