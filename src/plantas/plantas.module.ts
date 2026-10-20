@@ -7,7 +7,7 @@ import { Planta } from './planta.entity.js';
 import { Cultivo } from '../cultivos/cultivo.entity.js';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Cultivo])],
+  imports: [TypeOrmModule.forFeature([Planta, Cultivo])],
   providers: [
     {
       provide: PLANTAS_SERVICE,

@@ -60,7 +60,7 @@ export class PlantasController {
         return this.plantasService.actualizarPlanta(validarIdParametro(id, 'id'), dto);
     }
 
-    @Delete('')
+    @Delete(':id')
     @ApiOperation({ summary: 'Eliminar una planta' })
     @ApiParam({ name: 'id', description: 'Identificador de planta', example: 1 })
     @ApiResponse({ status: 200, description: 'Eliminacion realizada', type: Boolean })
@@ -69,5 +69,7 @@ export class PlantasController {
     @ApiResponse({ status: 409, description: 'La planta tiene susceptibilidades, cultivos o brotes asociados y no se puede eliminar' })
     eliminarPlanta(@Param('id') id: string) {
         return this.plantasService.eliminarPlanta(validarIdParametro(id, 'id'));
+        
+
     }
 }
